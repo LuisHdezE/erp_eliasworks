@@ -11,15 +11,6 @@ use App\Presentation\Livewire\Pages\ServicesPage;
 
 Route::get('/', HomePage::class)->name('home');
 
-// RUTA TEMPORAL PARA MIGRACIONES (Eliminar después de usar)
-Route::get('/migrate', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return "Base de datos migrada con éxito: " . \Illuminate\Support\Facades\Artisan::output();
-    } catch (\Exception $e) {
-        return "Error al migrar: " . $e->getMessage();
-    }
-});
 
 Route::get('/catalogo', ApplicationsPage::class);
 Route::get('/app/{slug}', ApplicationDetailPage::class);
