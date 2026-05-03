@@ -46,8 +46,12 @@
 }
 
 @layer base {
+  html {
+    font-size: 15px;
+  }
+
   body {
-    @apply antialiased bg-gray-50 text-gray-900;
+    @apply antialiased bg-gray-50 text-gray-900 leading-relaxed;
   }
   
   .dark body {
@@ -56,6 +60,31 @@
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
+  }
+
+  /* Forzamos estilos de los inputs para evitar herencias no deseadas */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="password"],
+  input[type="number"],
+  textarea {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+    outline: 2px solid transparent !important;
+    outline-offset: 2px !important;
+    border: 1px solid #e2e8f0 !important;
+    transition: all 0.2s ease-in-out !important;
+    background-color: white !important;
+  }
+
+  input:focus, textarea:focus {
+    border-color: #2563eb !important; /* primary-600 */
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+    outline: none !important;
   }
 }
 
@@ -69,11 +98,11 @@
   }
   
   .btn-primary {
-    @apply inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
   }
   
   .btn-secondary {
-    @apply inline-flex justify-center items-center px-6 py-3 border border-gray-300 dark:border-slate-700 text-base font-medium rounded-full text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
+    @apply inline-flex justify-center items-center px-5 py-2.5 border border-gray-300 dark:border-slate-700 text-sm font-medium rounded-full text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
   }
   
   .card {

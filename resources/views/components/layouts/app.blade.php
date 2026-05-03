@@ -18,6 +18,37 @@
 
     <!-- Styles and Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Forzado agresivo de estilos para inputs (bypass de cache/compilación) */
+        input[type="text"], 
+        input[type="email"], 
+        input[type="tel"], 
+        textarea {
+            padding-left: 32px !important;
+            padding-right: 32px !important;
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+            outline: none !important;
+            box-shadow: none !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            font-size: 15px !important;
+            transition: all 0.2s ease !important;
+            -webkit-appearance: none !important;
+        }
+
+        input:focus, 
+        textarea:focus {
+            outline: none !important;
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15) !important;
+        }
+
+        /* Eliminar el halo negro de accesibilidad en navegadores Chromium */
+        :focus {
+            outline: none !important;
+        }
+    </style>
     @livewireStyles
 </head>
 <body class="antialiased bg-gray-50 text-gray-900 selection:bg-primary-500 selection:text-white flex flex-col min-h-screen">
@@ -25,7 +56,7 @@
     <!-- Navbar -->
     <header class="sticky top-0 z-50 glass border-b border-gray-200/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center">
                     <a href="/" class="text-2xl font-extrabold tracking-tight text-primary-600 flex items-center gap-2">
                         <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +73,7 @@
                 </nav>
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="/admin" class="text-gray-600 hover:text-primary-600 font-medium text-sm transition-colors">Portal de Clientes</a>
-                    <a href="/contacto" class="btn-primary py-2 px-5 text-sm">Hablemos</a>
+                    <a href="/contacto" class="btn-primary py-1.5 px-4 text-xs">Hablemos</a>
                 </div>
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">

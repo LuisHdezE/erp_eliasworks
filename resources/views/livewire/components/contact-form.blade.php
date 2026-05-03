@@ -37,7 +37,7 @@
             <div>
                 <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nombre completo <span class="text-red-500">*</span></label>
                 <div class="mt-1">
-                    <input type="text" wire:model.blur="name" id="name" autocomplete="name" class="block w-full rounded-xl border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Ej. Juan Pérez">
+                    <input type="text" wire:model.blur="name" id="name" autocomplete="name" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Ej. Juan Pérez">
                 </div>
                 @error('name') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
@@ -45,7 +45,7 @@
             <div>
                 <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Correo electrónico <span class="text-red-500">*</span></label>
                 <div class="mt-1">
-                    <input type="email" wire:model.blur="email" id="email" autocomplete="email" class="block w-full rounded-xl border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="juan@ejemplo.com">
+                    <input type="email" wire:model.blur="email" id="email" autocomplete="email" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="juan@ejemplo.com">
                 </div>
                 @error('email') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
@@ -53,7 +53,7 @@
             <div>
                 <label for="company" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Empresa (Opcional)</label>
                 <div class="mt-1">
-                    <input type="text" wire:model.blur="company" id="company" autocomplete="organization" class="block w-full rounded-xl border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Tu Empresa S.A.">
+                    <input type="text" wire:model.blur="company" id="company" autocomplete="organization" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Tu Empresa S.A.">
                 </div>
                 @error('company') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
@@ -62,7 +62,7 @@
                 <div>
                     <label for="phone" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Teléfono</label>
                     <div class="mt-1">
-                        <input type="text" wire:model.blur="phone" id="phone" autocomplete="tel" class="block w-full rounded-xl border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="+54 11 ...">
+                        <input type="text" wire:model.blur="phone" id="phone" autocomplete="tel" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="+54 11 ...">
                     </div>
                     @error('phone') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                 </div>
@@ -70,7 +70,7 @@
                 <div>
                     <label for="whatsapp" class="block text-sm font-medium text-slate-700 dark:text-slate-300">WhatsApp</label>
                     <div class="mt-1">
-                        <input type="text" wire:model.blur="whatsapp" id="whatsapp" class="block w-full rounded-xl border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="+54 9 11 ...">
+                        <input type="text" wire:model.blur="whatsapp" id="whatsapp" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="+54 9 11 ...">
                     </div>
                     @error('whatsapp') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                 </div>
@@ -79,7 +79,7 @@
             <div>
                 <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Mensaje <span class="text-red-500">*</span></label>
                 <div class="mt-1">
-                    <textarea id="message" wire:model.blur="message" rows="4" class="block w-full rounded-xl border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="¿Cómo podemos ayudarte?"></textarea>
+                    <textarea id="message" wire:model.blur="message" rows="4" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="¿Cómo podemos ayudarte?"></textarea>
                 </div>
                 @error('message') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
