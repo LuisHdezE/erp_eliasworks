@@ -14,7 +14,10 @@ class SubmitContactRequestUseCase
             'name' => $data['name'],
             'email' => $data['email'],
             'company' => $data['company'] ?? null,
+            'phone' => $data['phone'] ?? null,
+            'whatsapp' => $data['whatsapp'] ?? null,
             'message' => $data['message'],
+            'application_id' => $data['application_id'] ?? null,
             'status' => 'new',
         ]);
 

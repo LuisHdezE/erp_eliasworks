@@ -16,10 +16,12 @@ class ContactRequest extends Model
         'name',
         'email',
         'phone',
+        'whatsapp',
         'company',
         'need_type',
         'budget_range',
         'message',
+        'application_id',
         'status',
         'internal_notes',
         'responsible_id',
@@ -39,6 +41,11 @@ class ContactRequest extends Model
     public function responsible(): BelongsTo
     {
         return $this->belongsTo(User::class, 'responsible_id');
+    }
+
+    public function application(): BelongsTo
+    {
+        return $this->belongsTo(Application::class);
     }
 
     // — Scopes —

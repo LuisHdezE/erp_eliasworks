@@ -2,7 +2,10 @@
 
 namespace App\Domain\Leads\Enums;
 
-enum ContactStatus: string
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
+
+enum ContactStatus: string implements HasLabel, HasColor
 {
     case New = 'new';
     case Contacted = 'contacted';
@@ -12,7 +15,7 @@ enum ContactStatus: string
     case Lost = 'lost';
     case Spam = 'spam';
 
-    public function label(): string
+    public function getLabel(): ?string
     {
         return match ($this) {
             self::New => 'Nuevo',
@@ -25,7 +28,7 @@ enum ContactStatus: string
         };
     }
 
-    public function color(): string
+    public function getColor(): string | array | null
     {
         return match ($this) {
             self::New => 'info',

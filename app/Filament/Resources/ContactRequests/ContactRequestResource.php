@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ContactRequests;
 
+use App\Filament\Resources\ContactRequests\Pages\ContactRequestKanban;
 use App\Filament\Resources\ContactRequests\Pages\CreateContactRequest;
 use App\Filament\Resources\ContactRequests\Pages\EditContactRequest;
 use App\Filament\Resources\ContactRequests\Pages\ListContactRequests;
@@ -41,6 +42,7 @@ class ContactRequestResource extends Resource
     {
         return [
             'index' => ListContactRequests::route('/'),
+            'kanban' => ContactRequestKanban::route('/kanban'),
             'create' => CreateContactRequest::route('/create'),
             'edit' => EditContactRequest::route('/{record}/edit'),
         ];
