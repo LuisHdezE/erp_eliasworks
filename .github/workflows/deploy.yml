@@ -36,9 +36,10 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ftp.eliasworks.uy
-        username: eliasworks@ftp.eliasworks.uy
+        username: eliasworks
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
+        server-dir: public_html/
         # Excluimos archivos que no deben estar en el servidor o que se manejan aparte
         exclude: |
           **/.git*
