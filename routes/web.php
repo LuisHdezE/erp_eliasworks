@@ -21,13 +21,3 @@ Route::get('/contacto', ContactPage::class);
 
 Route::view('/privacidad', 'pages.legal.privacy');
 Route::view('/terminos', 'pages.legal.terms');
-
-// Ruta temporal para ejecutar migraciones en el hosting sin SSH
-Route::get('/run-migrations', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return 'Migraciones ejecutadas con éxito: ' . \Illuminate\Support\Facades\Artisan::output();
-    } catch (\Exception $e) {
-        return 'Error al ejecutar migraciones: ' . $e->getMessage();
-    }
-});
