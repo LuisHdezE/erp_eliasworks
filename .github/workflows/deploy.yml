@@ -39,7 +39,7 @@ jobs:
         username: ftp@eliasworks.uy
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
-        server-dir: /public_html/
+        server-dir: ./
         # Excluimos archivos que no deben estar en el servidor o que se manejan aparte
         exclude: |
           **/.git*
