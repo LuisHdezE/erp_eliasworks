@@ -11,17 +11,6 @@ use App\Presentation\Livewire\Pages\ServicesPage;
 
 Route::get('/', HomePage::class)->name('home');
 
-// RUTA TEMPORAL PARA SEEDERS (Eliminar después de usar)
-Route::get('/seed', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-        return "Base de datos poblada con éxito: " . \Illuminate\Support\Facades\Artisan::output();
-    } catch (\Exception $e) {
-        return "Error al poblar: " . $e->getMessage();
-    }
-});
-
-
 Route::get('/catalogo', ApplicationsPage::class);
 Route::get('/app/{slug}', ApplicationDetailPage::class);
 Route::get('/servicios', ServicesPage::class);
