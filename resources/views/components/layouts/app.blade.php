@@ -5,139 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <x-seo-meta 
-        :title="$title ?? null" 
-        :description="$description ?? null" 
-        :image="$image ?? null" 
+    <x-seo-meta
+        :title="$title ?? null"
+        :description="$description ?? null"
+        :image="$image ?? null"
     />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Styles and Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        /* Forzado agresivo de estilos para inputs (bypass de cache/compilación) */
-        input[type="text"], 
-        input[type="email"], 
-        input[type="tel"], 
-        textarea {
-            padding-left: 32px !important;
-            padding-right: 32px !important;
-            padding-top: 14px !important;
-            padding-bottom: 14px !important;
-            outline: none !important;
-            box-shadow: none !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 12px !important;
-            font-size: 15px !important;
-            transition: all 0.2s ease !important;
-            -webkit-appearance: none !important;
-        }
-
-        input:focus, 
-        textarea:focus {
-            outline: none !important;
-            border-color: #2563eb !important;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15) !important;
-        }
-
-        /* Eliminar el halo negro de accesibilidad en navegadores Chromium */
-        :focus {
-            outline: none !important;
-        }
-    </style>
     @livewireStyles
 </head>
-<body class="antialiased bg-gray-50 text-gray-900 selection:bg-primary-500 selection:text-white flex flex-col min-h-screen">
-    
-    <!-- Navbar -->
-    <header class="sticky top-0 z-50 glass border-b border-gray-200/50">
+<body class="antialiased bg-white text-slate-900 selection:bg-primary-500 selection:text-white flex flex-col min-h-screen">
+    <header class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="/" class="text-2xl font-extrabold tracking-tight text-primary-600 flex items-center gap-2">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            <div class="flex justify-between items-center h-18 py-3">
+                <a href="/" class="flex items-center gap-3 group" aria-label="EliasWorks, inicio">
+                    <span class="h-10 w-10 rounded-xl bg-slate-950 text-white flex items-center justify-center group-hover:bg-primary-700 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M8 9l3 3-3 3m5 0h3M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
                         </svg>
-                        EliasWorks
-                    </a>
-                </div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="/" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Inicio</a>
-                    <a href="/catalogo" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Catálogo</a>
-                    <a href="/servicios" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Servicios</a>
-                    <a href="/contacto" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Contacto</a>
+                    </span>
+                    <span>
+                        <span class="block text-lg font-extrabold tracking-tight text-slate-950 leading-none">EliasWorks</span>
+                        <span class="block mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Software Engineering</span>
+                    </span>
+                </a>
+
+                <nav class="hidden lg:flex items-center gap-7" aria-label="Navegación principal">
+                    <a href="/" class="text-sm font-semibold text-slate-600 hover:text-primary-700 transition-colors">Inicio</a>
+                    <a href="/proyectos" class="text-sm font-semibold text-slate-600 hover:text-primary-700 transition-colors">Proyectos</a>
+                    <a href="/servicios" class="text-sm font-semibold text-slate-600 hover:text-primary-700 transition-colors">Servicios</a>
+                    <a href="/proceso" class="text-sm font-semibold text-slate-600 hover:text-primary-700 transition-colors">Proceso</a>
+                    <a href="/contacto" class="text-sm font-semibold text-slate-600 hover:text-primary-700 transition-colors">Contacto</a>
                 </nav>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="/admin" class="text-gray-600 hover:text-primary-600 font-medium text-sm transition-colors">Portal de Clientes</a>
-                    <a href="/contacto" class="btn-primary py-1.5 px-4 text-xs">Hablemos</a>
+
+                <div class="hidden lg:flex items-center gap-3">
+                    <a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="text-sm font-semibold text-slate-600 hover:text-primary-700 transition-colors">GitHub</a>
+                    <a href="/contacto" class="inline-flex items-center justify-center rounded-full bg-slate-950 hover:bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors">Hablemos</a>
                 </div>
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button type="button" class="text-gray-600 hover:text-primary-600 focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+                <details class="relative lg:hidden">
+                    <summary class="list-none cursor-pointer rounded-xl border border-slate-200 p-2.5 text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500" aria-label="Abrir navegación">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                    </button>
-                </div>
+                    </summary>
+                    <nav class="absolute right-0 mt-3 w-64 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl" aria-label="Navegación móvil">
+                        <a href="/" class="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Inicio</a>
+                        <a href="/proyectos" class="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Proyectos</a>
+                        <a href="/servicios" class="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Servicios</a>
+                        <a href="/proceso" class="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Proceso</a>
+                        <a href="/contacto" class="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">Contacto</a>
+                        <div class="my-2 border-t border-slate-100"></div>
+                        <a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="block rounded-xl px-4 py-3 text-sm font-semibold text-primary-700 hover:bg-primary-50">GitHub ↗</a>
+                    </nav>
+                </details>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-grow">
         {{ $slot }}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-1 md:col-span-2">
-                    <a href="/" class="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2 mb-4">
-                        <svg class="w-8 h-8 text-primary-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                        EliasWorks
-                    </a>
-                    <p class="text-slate-400 max-w-sm">
-                        Desarrollamos soluciones web y aplicaciones SaaS para impulsar la eficiencia y crecimiento de tu negocio.
-                    </p>
-                </div>
+    <footer class="bg-slate-950 text-slate-300 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+            <div class="grid gap-10 md:grid-cols-[1.4fr_0.8fr_0.8fr]">
                 <div>
-                    <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Enlaces Rápidos</h3>
-                    <ul class="space-y-3">
-                        <li><a href="/catalogo" class="hover:text-white transition-colors">Catálogo de Apps</a></li>
-                        <li><a href="/servicios" class="hover:text-white transition-colors">Nuestros Servicios</a></li>
-                        <li><a href="/proyectos" class="hover:text-white transition-colors">Casos de Éxito</a></li>
+                    <a href="/" class="inline-flex items-center gap-3 text-white">
+                        <span class="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M8 9l3 3-3 3m5 0h3M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                            </svg>
+                        </span>
+                        <span>
+                            <span class="block text-xl font-extrabold">EliasWorks</span>
+                            <span class="block text-xs text-slate-400">Software Engineering by Luis A. Hernández Elias</span>
+                        </span>
+                    </a>
+                    <p class="mt-5 max-w-xl text-sm leading-6 text-slate-400">Backend, APIs, modernización legacy y aplicaciones transaccionales con arquitectura explícita, pruebas y evidencia técnica.</p>
+                </div>
+
+                <div>
+                    <h2 class="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Portfolio</h2>
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li><a href="/proyectos" class="hover:text-white transition-colors">Proyectos seleccionados</a></li>
+                        <li><a href="/servicios" class="hover:text-white transition-colors">Servicios</a></li>
+                        <li><a href="/proceso" class="hover:text-white transition-colors">Proceso</a></li>
+                        <li><a href="/catalogo" class="hover:text-white transition-colors">Lab / Catálogo</a></li>
                     </ul>
                 </div>
+
                 <div>
-                    <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Legal</h3>
-                    <ul class="space-y-3">
-                        <li><a href="/privacidad" class="hover:text-white transition-colors">Política de Privacidad</a></li>
-                        <li><a href="/terminos" class="hover:text-white transition-colors">Términos de Servicio</a></li>
+                    <h2 class="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Conectar</h2>
+                    <ul class="mt-4 space-y-3 text-sm">
                         <li><a href="/contacto" class="hover:text-white transition-colors">Contacto</a></li>
+                        <li><a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="hover:text-white transition-colors">GitHub ↗</a></li>
+                        <li><a href="/privacidad" class="hover:text-white transition-colors">Privacidad</a></li>
+                        <li><a href="/terminos" class="hover:text-white transition-colors">Términos</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-sm">
-                    &copy; {{ date('Y') }} EliasWorks. Todos los derechos reservados.
-                </p>
-                <div class="flex space-x-6 mt-4 md:mt-0">
-                    <a href="#" class="text-slate-400 hover:text-white transition-colors">
-                        <span class="sr-only">Twitter</span>
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/></svg>
-                    </a>
-                    <a href="#" class="text-slate-400 hover:text-white transition-colors">
-                        <span class="sr-only">GitHub</span>
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
-                    </a>
-                </div>
+
+            <div class="mt-12 pt-7 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500">
+                <p>&copy; {{ date('Y') }} EliasWorks. Todos los derechos reservados.</p>
+                <p>Uruguay · Software Engineering portfolio</p>
             </div>
         </div>
     </footer>
