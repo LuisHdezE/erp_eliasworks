@@ -2,7 +2,6 @@
 
 namespace App\Presentation\Livewire\Pages;
 
-use App\Infrastructure\Persistence\Eloquent\Models\Project;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -11,8 +10,8 @@ class ProjectsPage extends Component
 {
     public function render()
     {
-        $projects = Project::where('is_published', true)->orderBy('sort_order', 'asc')->get();
-
-        return view('livewire.pages.projects-page', compact('projects'));
+        return view('livewire.pages.projects-page', [
+            'projects' => config('portfolio.case_studies', []),
+        ]);
     }
 }
