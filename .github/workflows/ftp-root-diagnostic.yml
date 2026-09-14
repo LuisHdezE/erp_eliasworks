@@ -18,35 +18,56 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Probe public cache behavior read-only
+      - name: Compare deployed runtime files byte-for-byte
+        env:
+          FTP_USER: luis@eliasworks.uy
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
 
-          for variant in normal bust nocache direct_public; do
-            case "$variant" in
-              normal)
-                url='https://eliasworks.uy/'
-                curl --silent --show-error --fail --location --dump-header "/tmp/${variant}.headers" "$url" --output "/tmp/${variant}.html"
-                ;;
-              bust)
-                url="https://eliasworks.uy/?ew_diag=${GITHUB_SHA}"
-                curl --silent --show-error --fail --location --dump-header "/tmp/${variant}.headers" "$url" --output "/tmp/${variant}.html"
-                ;;
-              nocache)
-                url="https://eliasworks.uy/?ew_nocache=${GITHUB_RUN_ID}"
-                curl --silent --show-error --fail --location -H 'Cache-Control: no-cache, no-store, max-age=0' -H 'Pragma: no-cache' --dump-header "/tmp/${variant}.headers" "$url" --output "/tmp/${variant}.html"
-                ;;
-              direct_public)
-                url="https://eliasworks.uy/public/?ew_public=${GITHUB_SHA}"
-                curl --silent --show-error --fail --location -H 'Cache-Control: no-cache' --dump-header "/tmp/${variant}.headers" "$url" --output "/tmp/${variant}.html"
-                ;;
-            esac
+          compare_runtime_file() {
+            local label="$1"
+            local local_path="$2"
+            local remote_path="$3"
+            local remote_file="/tmp/${label}.remote"
 
-            echo "=== ${variant} ==="
-            echo "BYTES=$(wc -c < "/tmp/${variant}.html")"
-            echo "SHA256=$(sha256sum "/tmp/${variant}.html" | cut -d' ' -f1)"
-            grep -Eio '<h1[^>]*>[^<]*' "/tmp/${variant}.html" | head -1 | sed -E 's/<h1[^>]*>//' | sed 's/&amp;/\&/g' | sed 's/^/H1=/' || true
-            grep -Fq 'Construyo y modernizo software de negocio' "/tmp/${variant}.html" && echo 'CURRENT_HOME=true' || echo 'CURRENT_HOME=false'
-            grep -Fq 'Ingeniería &amp; Software que genera resultados' "/tmp/${variant}.html" && echo 'OLD_HOME=true' || echo 'OLD_HOME=false'
-            grep -Ei '^(HTTP/|server:|cache-control:|age:|via:|x-cache:|x-litespeed-cache:|x-litespeed-tag:|etag:|last-modified:)' "/tmp/${variant}.headers" || true
-          done
+            echo "=== ${label} ==="
+            if [ ! -f "$local_path" ]; then
+              echo "LOCAL_EXISTS=false"
+              return 0
+            fi
+
+            echo "LOCAL_EXISTS=true"
+            if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" "ftp://ftp.eliasworks.uy/public_html/${remote_path}" --output "$remote_file"; then
+              echo "REMOTE_EXISTS=true"
+            else
+              echo "REMOTE_EXISTS=false"
+              return 0
+            fi
+
+            echo "LOCAL_BYTES=$(wc -c < "$local_path")"
+            echo "REMOTE_BYTES=$(wc -c < "$remote_file")"
+            echo "LOCAL_SHA256=$(sha256sum "$local_path" | cut -d' ' -f1)"
+            echo "REMOTE_SHA256=$(sha256sum "$remote_file" | cut -d' ' -f1)"
+
+            if cmp -s "$local_path" "$remote_file"; then
+              echo "MATCH=true"
+            else
+              echo "MATCH=false"
+            fi
+          }
+
+          compare_runtime_file PUBLIC_INDEX public/index.php public/index.php
+          compare_runtime_file BOOTSTRAP_APP bootstrap/app.php bootstrap/app.php
+          compare_runtime_file HOME_PAGE_CLASS app/Presentation/Livewire/Pages/HomePage.php app/Presentation/Livewire/Pages/HomePage.php
+          compare_runtime_file WEB_ROUTES routes/web.php routes/web.php
+          compare_runtime_file PUBLIC_HTACCESS public/.htaccess public/.htaccess
+          compare_runtime_file HOME_BLADE resources/views/livewire/pages/home-page.blade.php resources/views/livewire/pages/home-page.blade.php
+
+      - name: Confirm live response remains distinct from current source
+        run: |
+          set -euo pipefail
+          curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
+          echo "LIVE_BYTES=$(wc -c < /tmp/live-home.html)"
+          echo "LIVE_SHA256=$(sha256sum /tmp/live-home.html | cut -d' ' -f1)"
+          grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'LIVE_HAS_CURRENT_HOME=true' || echo 'LIVE_HAS_CURRENT_HOME=false'
