@@ -62,7 +62,6 @@
     @apply font-heading tracking-tight;
   }
 
-  /* Forzamos estilos de los inputs para evitar herencias no deseadas */
   input[type="text"],
   input[type="email"],
   input[type="tel"],
@@ -82,7 +81,7 @@
   }
 
   input:focus, textarea:focus {
-    border-color: #2563eb !important; /* primary-600 */
+    border-color: #2563eb !important;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
     outline: none !important;
   }
@@ -107,5 +106,32 @@
   
   .card {
     @apply bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow duration-300;
+  }
+
+  .tech-grid {
+    background-image:
+      linear-gradient(rgba(96, 165, 250, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96, 165, 250, 0.055) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.2));
+  }
+
+  .surface-sheen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(130deg, rgba(255,255,255,0.055), transparent 30%, transparent 72%, rgba(59,130,246,0.04));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
