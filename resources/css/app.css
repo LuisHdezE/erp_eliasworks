@@ -180,6 +180,18 @@
   }
 }
 
+@media (min-width: 1280px) {
+  .hero-stage h1 {
+    font-size: 5.1rem !important;
+    max-width: 42rem;
+  }
+
+  .hero-stage .dashboard-shell {
+    margin-right: 4.5rem;
+    transform: translateX(-1.25rem) rotate(-1deg) !important;
+  }
+}
+
 @media (max-width: 1279px) {
   .dashboard-shell {
     transform: none !important;
