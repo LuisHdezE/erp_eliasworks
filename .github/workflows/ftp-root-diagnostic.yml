@@ -1,6 +1,6 @@
 name: EliasWorks FTP Root Diagnostic
 
-# Branch-only probe: read-only checks to identify the document root actually serving eliasworks.uy.
+# Branch-only probe: read-only checks to identify what eliasworks.uy actually serves.
 on:
   pull_request:
     branches: [ main ]
@@ -13,13 +13,30 @@ permissions:
 
 jobs:
   ftp-root-diagnostic:
-    name: Inspect FTP root safely
+    name: Inspect live EliasWorks safely
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Compare live homepage with FTP candidate read-only
+      - name: Verify live Laravel portfolio signals read-only
+        run: |
+          set -euo pipefail
+          curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
+          curl --silent --show-error --fail --location https://eliasworks.uy/proyectos --output /tmp/live-projects.html
+
+          echo '=== LIVE HOME SIGNALS ==='
+          grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'HOME_CURRENT_POSITIONING=true' || echo 'HOME_CURRENT_POSITIONING=false'
+          grep -Fq 'Insurance Claims Legacy Modernization' /tmp/live-home.html && echo 'HOME_INSURANCECLAIMS=true' || echo 'HOME_INSURANCECLAIMS=false'
+          grep -Fq 'R3 full-product release · v0.3.0' /tmp/live-home.html && echo 'HOME_R3_RELEASE=true' || echo 'HOME_R3_RELEASE=false'
+
+          echo '=== LIVE PROJECTS SIGNALS ==='
+          grep -Fq 'Proyectos seleccionados' /tmp/live-projects.html && echo 'PROJECTS_CURRENT_HEADING=true' || echo 'PROJECTS_CURRENT_HEADING=false'
+          grep -Fq '22 superficies web productizadas' /tmp/live-projects.html && echo 'PROJECTS_R3_EVIDENCE=true' || echo 'PROJECTS_R3_EVIDENCE=false'
+          grep -Fq 'eFactura' /tmp/live-projects.html && echo 'PROJECTS_EFACTURA=true' || echo 'PROJECTS_EFACTURA=false'
+          grep -Fq 'ZoFloridane' /tmp/live-projects.html && echo 'PROJECTS_ZOFLORIDANE=true' || echo 'PROJECTS_ZOFLORIDANE=false'
+
+      - name: Compare live homepage with static FTP candidate read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
@@ -27,41 +44,13 @@ jobs:
           set -euo pipefail
           curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
           curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/eliasworks.uy/index.html --output /tmp/ftp-home.html
-
-          echo '=== SAFE HOMEPAGE COMPARISON ==='
           echo "LIVE_BYTES=$(wc -c < /tmp/live-home.html)"
-          echo "FTP_BYTES=$(wc -c < /tmp/ftp-home.html)"
-          echo "LIVE_SHA256=$(sha256sum /tmp/live-home.html | cut -d' ' -f1)"
-          echo "FTP_SHA256=$(sha256sum /tmp/ftp-home.html | cut -d' ' -f1)"
-
+          echo "FTP_STATIC_BYTES=$(wc -c < /tmp/ftp-home.html)"
           if cmp -s /tmp/live-home.html /tmp/ftp-home.html; then
-            echo 'LIVE_MATCHES_FTP_ELIASWORKS_ROOT=true'
+            echo 'LIVE_MATCHES_STATIC_ELIASWORKS_ROOT=true'
           else
-            echo 'LIVE_MATCHES_FTP_ELIASWORKS_ROOT=false'
+            echo 'LIVE_MATCHES_STATIC_ELIASWORKS_ROOT=false'
           fi
-
-          echo '=== SAFE TEXT SIGNALS ==='
-          if grep -Fq 'Ingeniería & Software que genera resultados' /tmp/live-home.html; then
-            echo 'LIVE_CONTAINS_OLD_HERO=true'
-          else
-            echo 'LIVE_CONTAINS_OLD_HERO=false'
-          fi
-          if grep -Fq 'Ingeniería & Software que genera resultados' /tmp/ftp-home.html; then
-            echo 'FTP_CANDIDATE_CONTAINS_OLD_HERO=true'
-          else
-            echo 'FTP_CANDIDATE_CONTAINS_OLD_HERO=false'
-          fi
-
-      - name: List candidate web roots read-only
-        env:
-          FTP_USER: luis@eliasworks.uy
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          set -euo pipefail
-          echo '=== FTP /public_html ==='
-          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/
-          echo '=== FTP /eliasworks.uy ==='
-          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/eliasworks.uy/
 
       - name: Dry-run FTP sync against account root
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
