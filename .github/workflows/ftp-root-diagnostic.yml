@@ -1,6 +1,6 @@
 name: EliasWorks FTP Root Diagnostic
 
-# Branch-only probe: read-only checks to identify the live document root.
+# Branch-only probe: read-only checks to identify stale Laravel runtime artifacts.
 on:
   pull_request:
     branches: [ main ]
@@ -19,58 +19,69 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Compare existing static files read-only
+      - name: Verify live root and deployed source read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
 
-          compare_file() {
-            local label="$1"
-            local http_url="$2"
-            local ftp_url="$3"
-            local http_file="/tmp/${label}-http"
-            local ftp_file="/tmp/${label}-ftp"
+          curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
+          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/resources/views/livewire/pages/home-page.blade.php --output /tmp/source-home.blade.php
+          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/routes/web.php --output /tmp/routes-web.php
 
-            local http_status
-            http_status=$(curl --silent --show-error --location --output "$http_file" --write-out '%{http_code}' "$http_url")
-            echo "${label}_HTTP_STATUS=${http_status}"
+          grep -Fq 'Ingeniería & Software que genera resultados' /tmp/live-home.html && echo 'LIVE_OLD_HERO=true' || echo 'LIVE_OLD_HERO=false'
+          grep -Fq 'Construyo y modernizo software de negocio' /tmp/source-home.blade.php && echo 'DEPLOYED_SOURCE_CURRENT_HOME=true' || echo 'DEPLOYED_SOURCE_CURRENT_HOME=false'
+          grep -Fq "Route::get('/', HomePage::class)" /tmp/routes-web.php && echo 'DEPLOYED_ROUTE_CURRENT_HOME=true' || echo 'DEPLOYED_ROUTE_CURRENT_HOME=false'
 
-            if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" "$ftp_url" --output "$ftp_file"; then
-              echo "${label}_FTP_EXISTS=true"
-            else
-              echo "${label}_FTP_EXISTS=false"
-              return 0
-            fi
-
-            if [ "$http_status" = "200" ]; then
-              echo "${label}_HTTP_BYTES=$(wc -c < "$http_file")"
-              echo "${label}_FTP_BYTES=$(wc -c < "$ftp_file")"
-              echo "${label}_HTTP_SHA256=$(sha256sum "$http_file" | cut -d' ' -f1)"
-              echo "${label}_FTP_SHA256=$(sha256sum "$ftp_file" | cut -d' ' -f1)"
-              if cmp -s "$http_file" "$ftp_file"; then
-                echo "${label}_MATCH=true"
-              else
-                echo "${label}_MATCH=false"
-              fi
-            fi
-          }
-
-          echo '=== PUBLIC_HTML/PUBLIC STATIC PROBES ==='
-          compare_file ROBOTS https://eliasworks.uy/robots.txt ftp://ftp.eliasworks.uy/public_html/public/robots.txt
-          compare_file SITEMAP https://eliasworks.uy/sitemap.xml ftp://ftp.eliasworks.uy/public_html/public/sitemap.xml
-          compare_file FAVICON https://eliasworks.uy/favicon.ico ftp://ftp.eliasworks.uy/public_html/public/favicon.ico
-
-          echo '=== ELIASWORKS.UY DIRECTORY STATIC PROBE ==='
-          compare_file PRUEBA https://eliasworks.uy/prueba.html ftp://ftp.eliasworks.uy/eliasworks.uy/prueba.html
-
-      - name: Verify current Laravel source is present in deployment target
+      - name: Inspect compiled Blade views read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
-          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/resources/views/livewire/pages/home-page.blade.php --output /tmp/home.blade.php
-          grep -Fq 'Construyo y modernizo software de negocio' /tmp/home.blade.php && echo 'FTP_PUBLIC_HTML_CURRENT_HOME=true' || echo 'FTP_PUBLIC_HTML_CURRENT_HOME=false'
-          grep -Fq 'Insurance Claims Legacy Modernization' /tmp/home.blade.php && echo 'FTP_PUBLIC_HTML_CURRENT_INSURANCECLAIMS=true' || echo 'FTP_PUBLIC_HTML_CURRENT_INSURANCECLAIMS=false'
+
+          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/storage/framework/views/ > /tmp/views-list.txt
+          TOTAL=$(grep -Ec '\.php$' /tmp/views-list.txt || true)
+          echo "COMPILED_VIEW_FILES=${TOTAL}"
+
+          OLD_HERO_MATCHES=0
+          OLD_TITLE_MATCHES=0
+          CURRENT_HOME_MATCHES=0
+          SCANNED=0
+
+          while IFS= read -r file; do
+            case "$file" in
+              *.php)
+                SCANNED=$((SCANNED + 1))
+                target="/tmp/view-${SCANNED}.php"
+                if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" "ftp://ftp.eliasworks.uy/public_html/storage/framework/views/${file}" --output "$target"; then
+                  grep -Fq 'Ingeniería & Software que genera resultados' "$target" && OLD_HERO_MATCHES=$((OLD_HERO_MATCHES + 1)) || true
+                  grep -Fq 'Elias Works | Engineering Solutions & Software Development' "$target" && OLD_TITLE_MATCHES=$((OLD_TITLE_MATCHES + 1)) || true
+                  grep -Fq 'Construyo y modernizo software de negocio' "$target" && CURRENT_HOME_MATCHES=$((CURRENT_HOME_MATCHES + 1)) || true
+                fi
+                ;;
+            esac
+          done < /tmp/views-list.txt
+
+          echo "COMPILED_VIEWS_SCANNED=${SCANNED}"
+          echo "COMPILED_OLD_HERO_MATCHES=${OLD_HERO_MATCHES}"
+          echo "COMPILED_OLD_TITLE_MATCHES=${OLD_TITLE_MATCHES}"
+          echo "COMPILED_CURRENT_HOME_MATCHES=${CURRENT_HOME_MATCHES}"
+
+      - name: Inspect Laravel cache inventory read-only
+        env:
+          FTP_USER: luis@eliasworks.uy
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+
+          echo '=== BOOTSTRAP CACHE FILE NAMES ==='
+          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/bootstrap/cache/ \
+            | sed '/^$/d' \
+            | sed -E 's/[^A-Za-z0-9._-]/_/g' \
+            | sort
+
+          echo '=== VIEW CACHE COUNT ONLY ==='
+          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/storage/framework/views/ \
+            | grep -Ec '\.php$' || true
