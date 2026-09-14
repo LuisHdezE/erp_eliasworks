@@ -1,6 +1,7 @@
 name: EliasWorks FTP Root Diagnostic
 
 # Read-only production diagnostics. Never merge this workflow.
+# Verification trigger after PR #8 production deployment.
 on:
   pull_request:
     branches: [ main ]
