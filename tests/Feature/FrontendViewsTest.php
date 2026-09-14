@@ -21,16 +21,23 @@ class FrontendViewsTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('Ingeniería de software')
+            ->assertSee('Software que resuelve problemas reales')
+            ->assertSee('Desarrollo de software')
             ->assertSee('con impacto real.')
-            ->assertSee('Construyo y modernizo software de negocio')
-            ->assertSee('InsuranceClaims · Release Console')
-            ->assertSee('Insurance Claims Legacy Modernization')
-            ->assertSee('R3 full-product release · v0.3.0')
-            ->assertSee('90 operaciones REST sobre 76 paths y 16 familias')
-            ->assertSee('Zero drift')
+            ->assertSee('Diseño, construyo y modernizo aplicaciones de negocio')
+            ->assertSee('Software Development')
+            ->assertSee('InsuranceClaims')
+            ->assertSee('R3 · v0.3.0')
+            ->assertSee('90')
+            ->assertSee('76')
+            ->assertSee('22')
+            ->assertSee('90/90')
+            ->assertSee('PostgreSQL 18')
+            ->assertSee('OpenAPI + Postman')
             ->assertSee('eFactura')
-            ->assertSee('ZoFloridane');
+            ->assertSee('ZoFloridane')
+            ->assertDontSee('Ingeniería de software')
+            ->assertDontSee('Software Engineering');
     }
 
     public function test_catalog_page_renders_successfully(): void
