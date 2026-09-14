@@ -1,0 +1,44 @@
+name: EliasWorks FTP Root Diagnostic
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/ftp-root-diagnostic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ftp-root-diagnostic:
+    name: Inspect FTP root safely
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dry-run FTP sync against account root
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftp.eliasworks.uy
+          username: luis@eliasworks.uy
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          server-dir: ./
+          dry-run: true
+          log-level: verbose
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/tests/**
+            .env
+            phpunit.xml
+            README.md
+            composer.lock
+            package.json
+            package-lock.json
+            vite.config.js
+            deploy.md
+            cookies.txt
