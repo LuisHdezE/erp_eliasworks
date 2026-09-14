@@ -18,56 +18,52 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Compare deployed runtime files byte-for-byte
+      - name: Fingerprint divergent production front controller read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
 
-          compare_runtime_file() {
-            local label="$1"
-            local local_path="$2"
-            local remote_path="$3"
-            local remote_file="/tmp/${label}.remote"
+          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
+            ftp://ftp.eliasworks.uy/public_html/public/index.php \
+            --output /tmp/remote-index.php
 
-            echo "=== ${label} ==="
-            if [ ! -f "$local_path" ]; then
-              echo "LOCAL_EXISTS=false"
-              return 0
-            fi
+          echo "LOCAL_INDEX_BYTES=$(wc -c < public/index.php)"
+          echo "REMOTE_INDEX_BYTES=$(wc -c < /tmp/remote-index.php)"
+          echo "LOCAL_INDEX_SHA256=$(sha256sum public/index.php | cut -d' ' -f1)"
+          echo "REMOTE_INDEX_SHA256=$(sha256sum /tmp/remote-index.php | cut -d' ' -f1)"
 
-            echo "LOCAL_EXISTS=true"
-            if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" "ftp://ftp.eliasworks.uy/public_html/${remote_path}" --output "$remote_file"; then
-              echo "REMOTE_EXISTS=true"
-            else
-              echo "REMOTE_EXISTS=false"
-              return 0
-            fi
+          grep -Fq "require_once __DIR__.'/../vendor/autoload.php'" /tmp/remote-index.php && echo 'REMOTE_HAS_LARAVEL_AUTOLOAD=true' || echo 'REMOTE_HAS_LARAVEL_AUTOLOAD=false'
+          grep -Fq "require_once __DIR__.'/../bootstrap/app.php'" /tmp/remote-index.php && echo 'REMOTE_HAS_LARAVEL_BOOTSTRAP=true' || echo 'REMOTE_HAS_LARAVEL_BOOTSTRAP=false'
+          grep -Fq 'handleRequest' /tmp/remote-index.php && echo 'REMOTE_HAS_HANDLE_REQUEST=true' || echo 'REMOTE_HAS_HANDLE_REQUEST=false'
+          grep -Fqi '<!DOCTYPE html' /tmp/remote-index.php && echo 'REMOTE_HAS_HTML_DOCUMENT=true' || echo 'REMOTE_HAS_HTML_DOCUMENT=false'
+          grep -Fq 'Elias Works | Engineering Solutions & Software Development' /tmp/remote-index.php && echo 'REMOTE_HAS_OLD_TITLE=true' || echo 'REMOTE_HAS_OLD_TITLE=false'
+          grep -Fq 'Ingeniería & Software que genera resultados' /tmp/remote-index.php && echo 'REMOTE_HAS_OLD_HERO=true' || echo 'REMOTE_HAS_OLD_HERO=false'
+          grep -Fq 'Construyo y modernizo software de negocio' /tmp/remote-index.php && echo 'REMOTE_HAS_CURRENT_HERO=true' || echo 'REMOTE_HAS_CURRENT_HERO=false'
 
-            echo "LOCAL_BYTES=$(wc -c < "$local_path")"
-            echo "REMOTE_BYTES=$(wc -c < "$remote_file")"
-            echo "LOCAL_SHA256=$(sha256sum "$local_path" | cut -d' ' -f1)"
-            echo "REMOTE_SHA256=$(sha256sum "$remote_file" | cut -d' ' -f1)"
+      - name: Inspect FTP deploy state read-only
+        env:
+          FTP_USER: luis@eliasworks.uy
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
 
-            if cmp -s "$local_path" "$remote_file"; then
-              echo "MATCH=true"
-            else
-              echo "MATCH=false"
-            fi
-          }
+          if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
+            ftp://ftp.eliasworks.uy/public_html/.ftp-deploy-sync-state.json \
+            --output /tmp/ftp-state.json; then
+            echo 'FTP_STATE_EXISTS=true'
+            echo "FTP_STATE_BYTES=$(wc -c < /tmp/ftp-state.json)"
+            grep -Fq 'public/index.php' /tmp/ftp-state.json && echo 'FTP_STATE_TRACKS_PUBLIC_INDEX=true' || echo 'FTP_STATE_TRACKS_PUBLIC_INDEX=false'
+          else
+            echo 'FTP_STATE_EXISTS=false'
+          fi
 
-          compare_runtime_file PUBLIC_INDEX public/index.php public/index.php
-          compare_runtime_file BOOTSTRAP_APP bootstrap/app.php bootstrap/app.php
-          compare_runtime_file HOME_PAGE_CLASS app/Presentation/Livewire/Pages/HomePage.php app/Presentation/Livewire/Pages/HomePage.php
-          compare_runtime_file WEB_ROUTES routes/web.php routes/web.php
-          compare_runtime_file PUBLIC_HTACCESS public/.htaccess public/.htaccess
-          compare_runtime_file HOME_BLADE resources/views/livewire/pages/home-page.blade.php resources/views/livewire/pages/home-page.blade.php
-
-      - name: Confirm live response remains distinct from current source
+      - name: Confirm public response remains stale
         run: |
           set -euo pipefail
           curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
           echo "LIVE_BYTES=$(wc -c < /tmp/live-home.html)"
           echo "LIVE_SHA256=$(sha256sum /tmp/live-home.html | cut -d' ' -f1)"
           grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'LIVE_HAS_CURRENT_HOME=true' || echo 'LIVE_HAS_CURRENT_HOME=false'
+          grep -Fq 'Elias Works | Engineering Solutions & Software Development' /tmp/live-home.html && echo 'LIVE_HAS_OLD_TITLE=true' || echo 'LIVE_HAS_OLD_TITLE=false'
