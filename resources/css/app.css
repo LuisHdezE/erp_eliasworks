@@ -26,7 +26,7 @@
 
   --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
   --font-heading: 'Outfit', ui-sans-serif, system-ui, sans-serif;
-  
+
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
   --radius-3xl: 2rem;
@@ -45,6 +45,11 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes console-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
 @layer base {
   html {
     font-size: 15px;
@@ -53,16 +58,15 @@
   body {
     @apply antialiased bg-gray-50 text-gray-900 leading-relaxed;
   }
-  
+
   .dark body {
     @apply bg-slate-900 text-white;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
   }
 
-  /* Forzamos estilos de los inputs para evitar herencias no deseadas */
   input[type="text"],
   input[type="email"],
   input[type="tel"],
@@ -82,7 +86,7 @@
   }
 
   input:focus, textarea:focus {
-    border-color: #2563eb !important; /* primary-600 */
+    border-color: #2563eb !important;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
     outline: none !important;
   }
@@ -92,20 +96,57 @@
   .glass {
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
   }
-  
+
   .dark .glass {
     @apply bg-slate-800/70 border-slate-700/50 shadow-2xl;
   }
-  
+
   .btn-primary {
     @apply inline-flex justify-center items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-full text-white bg-primary-600 hover:bg-primary-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
   }
-  
+
   .btn-secondary {
     @apply inline-flex justify-center items-center px-5 py-2.5 border border-gray-300 dark:border-slate-700 text-sm font-medium rounded-full text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 shadow-sm hover:shadow hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
   }
-  
+
   .card {
     @apply bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden hover:shadow-md transition-shadow duration-300;
+  }
+
+  .tech-grid {
+    background-image:
+      linear-gradient(rgba(96, 165, 250, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96, 165, 250, 0.055) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.22));
+  }
+
+  .surface-sheen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(132deg, rgba(255,255,255,0.06), transparent 28%, transparent 72%, rgba(59,130,246,0.055));
+    z-index: 1;
+  }
+
+  .surface-sheen > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .product-console {
+    animation: console-float 8s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

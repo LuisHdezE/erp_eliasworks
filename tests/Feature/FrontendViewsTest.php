@@ -21,10 +21,14 @@ class FrontendViewsTest extends TestCase
 
         $response
             ->assertOk()
+            ->assertSee('Ingeniería de software')
+            ->assertSee('con impacto real.')
             ->assertSee('Construyo y modernizo software de negocio')
+            ->assertSee('InsuranceClaims · Release Console')
             ->assertSee('Insurance Claims Legacy Modernization')
             ->assertSee('R3 full-product release · v0.3.0')
             ->assertSee('90 operaciones REST sobre 76 paths y 16 familias')
+            ->assertSee('Zero drift')
             ->assertSee('eFactura')
             ->assertSee('ZoFloridane');
     }
