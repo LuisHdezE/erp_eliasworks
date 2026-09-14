@@ -8,7 +8,7 @@ The public site is deployed at `eliasworks.uy` and is being repositioned around 
 
 The primary public narrative is built around selected engineering case studies rather than a generic agency catalogue:
 
-- **InsuranceClaims**: TypeScript/NestJS/React/PostgreSQL modernization MVP with Clean Architecture and governed QA evidence.
+- **InsuranceClaims**: R3 `v0.3.0` full-product modernization case study with TypeScript, NestJS, React, PostgreSQL, Clean Architecture, 90 REST operations, 22 productized web surfaces and governed release evidence.
 - **eFactura**: .NET 10 brownfield modernization for Uruguay electronic invoicing and transactional sales.
 - **ZoFloridane**: WordPress/WooCommerce storefront and purchase-flow modernization.
 

@@ -23,6 +23,8 @@ class FrontendViewsTest extends TestCase
             ->assertOk()
             ->assertSee('Construyo y modernizo software de negocio')
             ->assertSee('Insurance Claims Legacy Modernization')
+            ->assertSee('R3 full-product release · v0.3.0')
+            ->assertSee('90 operaciones REST sobre 76 paths y 16 familias')
             ->assertSee('eFactura')
             ->assertSee('ZoFloridane');
     }
@@ -45,6 +47,8 @@ class FrontendViewsTest extends TestCase
             ->assertOk()
             ->assertSee('Proyectos seleccionados')
             ->assertSee('Insurance Claims Legacy Modernization')
+            ->assertSee('R3 full-product release · v0.3.0')
+            ->assertSee('22 superficies web productizadas')
             ->assertSee('eFactura')
             ->assertSee('ZoFloridane');
     }

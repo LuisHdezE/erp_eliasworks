@@ -4,14 +4,14 @@ return [
     'case_studies' => [
         [
             'name' => 'Insurance Claims Legacy Modernization',
-            'eyebrow' => 'Greenfield modernization MVP',
-            'summary' => 'Modernización integral de flujos de siniestros con backend NestJS, frontend React, PostgreSQL y límites arquitectónicos explícitos.',
-            'stack' => ['TypeScript', 'NestJS', 'React', 'PostgreSQL', 'Clean Architecture'],
+            'eyebrow' => 'R3 full-product release · v0.3.0',
+            'summary' => 'Case study de modernización integral de siniestros gobernado como producto greenfield con coexistencia legacy simulada, backend NestJS, frontend React y PostgreSQL.',
+            'stack' => ['TypeScript', 'NestJS 12', 'React 19', 'PostgreSQL 18', 'Clean Architecture'],
             'evidence' => [
-                'Tres slices web aceptados: intake digital, seguimiento del cliente y backoffice.',
-                'API REST y superficie MCP de solo lectura separadas por contrato.',
-                'Idempotencia, RBAC, auditoría, concurrencia y Problem Details RFC 9457.',
-                'Lifecycle completo con evidencia de QA, Release Gate y Operations.',
+                '90 operaciones REST sobre 76 paths y 16 familias, con reconciliación runtime 90/90.',
+                '22 superficies web productizadas entre journeys públicos, operación, clientes, pólizas, finanzas, administración y recuperación.',
+                'OpenAPI y Postman sin drift, QA provider-real sobre PostgreSQL 18 y journeys responsive, accesibilidad y comportamiento offline/degradado.',
+                'JWT + RBAC, Argon2id, idempotencia, concurrencia, RFC 9457, auditoría durable y release gobernada v0.3.0.',
             ],
             'repository_url' => 'https://github.com/LuisHdezE/InsuranceClaims',
             'accent' => 'blue',
