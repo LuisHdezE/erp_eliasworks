@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: List FTP root and public_html read-only
+      - name: List candidate web roots read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
@@ -29,6 +29,10 @@ jobs:
           curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/
           echo '=== FTP /public_html ==='
           curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/
+          echo '=== FTP /eliasworks.uy ==='
+          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/eliasworks.uy/
+          echo '=== FTP /public_html/eliasworks.uy ==='
+          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/eliasworks.uy/ || true
 
       - name: Dry-run FTP sync against account root
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
