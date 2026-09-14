@@ -19,38 +19,57 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify live Laravel portfolio signals read-only
+      - name: Inspect public DNS and HTTP signals read-only
         run: |
           set -euo pipefail
-          curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
-          curl --silent --show-error --fail --location https://eliasworks.uy/proyectos --output /tmp/live-projects.html
+          echo '=== DNS ==='
+          echo "A_RECORDS=$(getent ahostsv4 eliasworks.uy | awk '{print $1}' | sort -u | paste -sd, -)"
 
-          echo '=== LIVE HOME SIGNALS ==='
-          grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'HOME_CURRENT_POSITIONING=true' || echo 'HOME_CURRENT_POSITIONING=false'
-          grep -Fq 'Insurance Claims Legacy Modernization' /tmp/live-home.html && echo 'HOME_INSURANCECLAIMS=true' || echo 'HOME_INSURANCECLAIMS=false'
-          grep -Fq 'R3 full-product release · v0.3.0' /tmp/live-home.html && echo 'HOME_R3_RELEASE=true' || echo 'HOME_R3_RELEASE=false'
+          curl --silent --show-error --fail --location --dump-header /tmp/live-headers.txt https://eliasworks.uy/ --output /tmp/live-home.html
 
-          echo '=== LIVE PROJECTS SIGNALS ==='
-          grep -Fq 'Proyectos seleccionados' /tmp/live-projects.html && echo 'PROJECTS_CURRENT_HEADING=true' || echo 'PROJECTS_CURRENT_HEADING=false'
-          grep -Fq '22 superficies web productizadas' /tmp/live-projects.html && echo 'PROJECTS_R3_EVIDENCE=true' || echo 'PROJECTS_R3_EVIDENCE=false'
-          grep -Fq 'eFactura' /tmp/live-projects.html && echo 'PROJECTS_EFACTURA=true' || echo 'PROJECTS_EFACTURA=false'
-          grep -Fq 'ZoFloridane' /tmp/live-projects.html && echo 'PROJECTS_ZOFLORIDANE=true' || echo 'PROJECTS_ZOFLORIDANE=false'
+          echo '=== SAFE HTTP HEADERS ==='
+          grep -Ei '^(HTTP/|server:|via:|x-powered-by:|x-cache:|cf-|content-type:|content-length:|etag:|last-modified:|location:)' /tmp/live-headers.txt || true
 
-      - name: Compare live homepage with static FTP candidate read-only
+          echo '=== SAFE DOCUMENT SIGNALS ==='
+          TITLE=$(python3 - <<'PY'
+          import re
+          from pathlib import Path
+          text = Path('/tmp/live-home.html').read_text(errors='ignore')
+          match = re.search(r'<title[^>]*>(.*?)</title>', text, flags=re.I|re.S)
+          print(re.sub(r'\s+', ' ', match.group(1)).strip() if match else 'NONE')
+          PY
+          )
+          H1=$(python3 - <<'PY'
+          import re
+          from pathlib import Path
+          text = Path('/tmp/live-home.html').read_text(errors='ignore')
+          match = re.search(r'<h1[^>]*>(.*?)</h1>', text, flags=re.I|re.S)
+          if not match:
+              print('NONE')
+          else:
+              value = re.sub(r'<[^>]+>', ' ', match.group(1))
+              print(re.sub(r'\s+', ' ', value).strip()[:240])
+          PY
+          )
+          echo "TITLE=${TITLE}"
+          echo "H1=${H1}"
+          echo "LIVE_BYTES=$(wc -c < /tmp/live-home.html)"
+          echo "LIVE_SHA256=$(sha256sum /tmp/live-home.html | cut -d' ' -f1)"
+
+      - name: Compare origin candidates read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
           curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
-          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/eliasworks.uy/index.html --output /tmp/ftp-home.html
-          echo "LIVE_BYTES=$(wc -c < /tmp/live-home.html)"
-          echo "FTP_STATIC_BYTES=$(wc -c < /tmp/ftp-home.html)"
-          if cmp -s /tmp/live-home.html /tmp/ftp-home.html; then
-            echo 'LIVE_MATCHES_STATIC_ELIASWORKS_ROOT=true'
-          else
-            echo 'LIVE_MATCHES_STATIC_ELIASWORKS_ROOT=false'
-          fi
+          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/eliasworks.uy/index.html --output /tmp/ftp-static-home.html
+          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/resources/views/livewire/pages/home-page.blade.php --output /tmp/ftp-laravel-home.blade.php
+
+          echo '=== CANDIDATE SIGNALS ==='
+          cmp -s /tmp/live-home.html /tmp/ftp-static-home.html && echo 'LIVE_EQUALS_STATIC_INDEX=true' || echo 'LIVE_EQUALS_STATIC_INDEX=false'
+          grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'LIVE_HAS_CURRENT_LARAVEL_COPY=true' || echo 'LIVE_HAS_CURRENT_LARAVEL_COPY=false'
+          grep -Fq 'Construyo y modernizo software de negocio' /tmp/ftp-laravel-home.blade.php && echo 'FTP_PUBLIC_HTML_HAS_CURRENT_LARAVEL_COPY=true' || echo 'FTP_PUBLIC_HTML_HAS_CURRENT_LARAVEL_COPY=false'
 
       - name: Dry-run FTP sync against account root
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
