@@ -1,173 +1,285 @@
-<div class="bg-white text-slate-900">
-    <section class="relative overflow-hidden bg-slate-950 text-white">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.28),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(20,184,166,0.18),transparent_28%)]"></div>
-        <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+<div class="bg-[#f6f8fb] text-slate-900">
+    @php
+        $flagship = $caseStudies[0] ?? null;
+        $secondaryProjects = array_slice($caseStudies, 1);
+    @endphp
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
-            <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-center">
-                <div class="max-w-3xl animate-[slide-up_0.7s_ease-out]">
-                    <div class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-slate-200 mb-8">
-                        <span class="h-2 w-2 rounded-full bg-secondary-500"></span>
+    <section class="relative isolate overflow-hidden bg-[#050b14] text-white">
+        <div class="tech-grid absolute inset-0 opacity-70"></div>
+        <div class="absolute -left-28 top-28 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl"></div>
+        <div class="absolute right-[-12rem] top-[-10rem] h-[42rem] w-[42rem] rounded-full bg-cyan-400/10 blur-3xl"></div>
+        <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>
+
+        <div class="relative mx-auto max-w-[1440px] px-4 pb-10 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-14 lg:pt-24">
+            <div class="grid items-center gap-14 xl:grid-cols-[0.86fr_1.14fr] xl:gap-12">
+                <div class="max-w-3xl">
+                    <div class="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-slate-300 backdrop-blur">
+                        <span class="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.8)]"></span>
                         Software Engineering · Uruguay
                     </div>
 
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
-                        Construyo y modernizo software de negocio que debe
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-white to-secondary-500">funcionar de verdad.</span>
+                    <p class="text-xs font-bold uppercase tracking-[0.24em] text-blue-300">Backend · Architecture · Modernization</p>
+                    <h1 class="mt-5 max-w-4xl text-[3.35rem] font-extrabold leading-[0.94] tracking-[-0.055em] sm:text-[4.6rem] lg:text-[5.5rem] xl:text-[5.9rem]">
+                        Ingeniería de software
+                        <span class="block bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent">con impacto real.</span>
                     </h1>
 
-                    <p class="mt-7 text-lg sm:text-xl leading-relaxed text-slate-300 max-w-2xl">
-                        Soy Luis A. Hernández Elias. Trabajo en backend, APIs, modernización de sistemas legacy y aplicaciones transaccionales, con foco en Clean Architecture, límites explícitos y evidencia técnica verificable.
+                    <p class="mt-7 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+                        Construyo y modernizo software de negocio, APIs y plataformas transaccionales con arquitectura explícita, pruebas automatizadas y evidencia técnica verificable.
                     </p>
 
-                    <div class="mt-9 flex flex-col sm:flex-row gap-4">
-                        <a href="/proyectos" class="inline-flex items-center justify-center rounded-full bg-primary-600 hover:bg-primary-500 px-7 py-3.5 font-semibold text-white transition-colors shadow-lg shadow-primary-950/40">
-                            Ver proyectos seleccionados
-                            <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
+                    <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                        <a href="/proyectos" class="group inline-flex items-center justify-center rounded-xl bg-blue-500 px-6 py-3.5 font-bold text-white shadow-[0_20px_55px_rgba(37,99,235,0.34)] transition hover:-translate-y-0.5 hover:bg-blue-400">
+                            Explorar proyectos
+                            <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
                         </a>
-                        <a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 hover:bg-white/10 px-7 py-3.5 font-semibold text-white transition-colors">
-                            Explorar GitHub
-                        </a>
+                        <a href="/contacto" class="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/[0.045] px-6 py-3.5 font-bold text-white transition hover:border-white/25 hover:bg-white/[0.08]">Hablemos</a>
                     </div>
 
-                    <p class="mt-6 text-sm text-slate-400">Disponible para oportunidades de Software Engineering y proyectos de modernización.</p>
-                </div>
-
-                <aside class="rounded-3xl border border-white/10 bg-white/[0.06] backdrop-blur p-6 sm:p-8 shadow-2xl shadow-black/20">
-                    <div class="flex items-center justify-between gap-4 pb-6 border-b border-white/10">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-300">Engineering brief</p>
-                            <h2 class="mt-2 text-2xl font-bold">Qué aporto al sistema</h2>
-                        </div>
-                        <span class="rounded-2xl bg-primary-500/10 p-3 text-primary-300">
-                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M8 9l3 3-3 3m5 0h3M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                            </svg>
-                        </span>
-                    </div>
-
-                    <dl class="divide-y divide-white/10">
-                        <div class="py-5 grid grid-cols-[7.5rem_1fr] gap-4">
-                            <dt class="text-sm font-semibold text-slate-400">Backend</dt>
-                            <dd class="text-sm text-slate-100">.NET/C#, TypeScript/NestJS, PHP/Laravel</dd>
-                        </div>
-                        <div class="py-5 grid grid-cols-[7.5rem_1fr] gap-4">
-                            <dt class="text-sm font-semibold text-slate-400">Arquitectura</dt>
-                            <dd class="text-sm text-slate-100">Clean Architecture, Ports & Adapters, contratos explícitos</dd>
-                        </div>
-                        <div class="py-5 grid grid-cols-[7.5rem_1fr] gap-4">
-                            <dt class="text-sm font-semibold text-slate-400">Fiabilidad</dt>
-                            <dd class="text-sm text-slate-100">Transacciones, idempotencia, concurrencia, auditoría y outbox</dd>
-                        </div>
-                        <div class="pt-5 grid grid-cols-[7.5rem_1fr] gap-4">
-                            <dt class="text-sm font-semibold text-slate-400">Entrega</dt>
-                            <dd class="text-sm text-slate-100">CI/CD, pruebas automatizadas, documentación y evidencia de QA</dd>
-                        </div>
-                    </dl>
-                </aside>
-            </div>
-        </div>
-    </section>
-
-    <section id="enfoque" class="py-20 sm:py-24 bg-slate-50 border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl">
-                <p class="text-sm font-bold uppercase tracking-[0.18em] text-primary-600">What I build</p>
-                <h2 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-slate-950">Ingeniería aplicada a software que mueve operaciones reales.</h2>
-                <p class="mt-5 text-lg text-slate-600">No parto de una tecnología por moda. Empiezo por límites, reglas, riesgos y evidencia, y desde ahí construyo la solución.</p>
-            </div>
-
-            <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                @foreach([
-                    ['Backend & APIs', 'Diseño de APIs, casos de uso y reglas de negocio con autoridad server-side y contratos claros.'],
-                    ['Legacy Modernization', 'Evolución incremental de sistemas existentes sin fingir que el reemplazo total siempre es viable.'],
-                    ['Transactional Systems', 'Flujos críticos con consistencia, idempotencia, rollback, auditoría y control de concurrencia.'],
-                    ['Business Interfaces', 'Interfaces que exponen procesos complejos con claridad, integración frontend y comportamiento verificable.'],
-                ] as [$title, $copy])
-                    <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <div class="h-10 w-10 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center font-bold">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                        <h3 class="mt-6 text-xl font-bold text-slate-950">{{ $title }}</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">{{ $copy }}</p>
-                    </article>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <section id="proyectos" class="py-20 sm:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-                <div class="max-w-3xl">
-                    <p class="text-sm font-bold uppercase tracking-[0.18em] text-primary-600">Selected work</p>
-                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-slate-950">Tres proyectos, tres tipos distintos de complejidad.</h2>
-                    <p class="mt-5 text-lg text-slate-600">Cada caso está limitado a capacidades que ya pueden comprobarse en el repositorio correspondiente.</p>
-                </div>
-                <a href="/proyectos" class="inline-flex items-center text-sm font-semibold text-primary-700 hover:text-primary-800">
-                    Ver detalle de proyectos
-                    <span class="ml-2">→</span>
-                </a>
-            </div>
-
-            <div class="mt-12 grid lg:grid-cols-3 gap-6">
-                @foreach($caseStudies as $project)
-                    <article class="group rounded-3xl border border-slate-200 bg-slate-50 p-7 hover:bg-white hover:shadow-xl hover:shadow-slate-200/60 transition-all duration-300 flex flex-col">
-                        <div class="flex items-start justify-between gap-4">
-                            <div>
-                                <p class="text-xs font-bold uppercase tracking-[0.16em] text-primary-600">{{ $project['eyebrow'] }}</p>
-                                <h3 class="mt-3 text-2xl font-bold text-slate-950">{{ $project['name'] }}</h3>
+                    <div class="mt-11 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
+                        @foreach([
+                            ['Backend & APIs', 'Contratos claros'],
+                            ['Clean Architecture', 'Límites explícitos'],
+                            ['Modernización', 'Legacy → evolución'],
+                            ['Delivery', 'CI + evidencia'],
+                        ] as [$title, $copy])
+                            <div class="border-l border-white/10 pl-4">
+                                <p class="text-xs font-bold text-white">{{ $title }}</p>
+                                <p class="mt-1 text-[11px] leading-4 text-slate-500">{{ $copy }}</p>
                             </div>
-                            <span class="h-10 w-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-500 group-hover:text-primary-700 group-hover:border-primary-200 transition-colors">↗</span>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="relative xl:pl-4">
+                    <div class="absolute -inset-8 rounded-full bg-blue-500/10 blur-3xl"></div>
+                    <div class="surface-sheen product-console relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a1625]/95 shadow-[0_45px_120px_rgba(0,0,0,0.58)]">
+                        <div class="flex items-center justify-between border-b border-white/10 bg-white/[0.025] px-5 py-4 sm:px-6">
+                            <div class="flex items-center gap-3">
+                                <div class="flex gap-1.5" aria-hidden="true">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-slate-700"></span>
+                                    <span class="h-2.5 w-2.5 rounded-full bg-slate-700"></span>
+                                    <span class="h-2.5 w-2.5 rounded-full bg-blue-400"></span>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">InsuranceClaims · Release Console</span>
+                            </div>
+                            <span class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-bold text-emerald-300">R3 · v0.3.0</span>
                         </div>
 
-                        <p class="mt-5 text-sm leading-6 text-slate-600">{{ $project['summary'] }}</p>
+                        <div class="grid md:grid-cols-[10.5rem_1fr]">
+                            <aside class="hidden border-r border-white/10 bg-black/10 p-5 md:block">
+                                <div class="mb-7 flex items-center gap-2.5">
+                                    <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-xs font-extrabold text-blue-200">IC</span>
+                                    <div>
+                                        <p class="text-xs font-bold text-white">InsuranceClaims</p>
+                                        <p class="mt-0.5 text-[10px] text-slate-600">Full product R3</p>
+                                    </div>
+                                </div>
+                                <nav class="space-y-1 text-[11px] font-semibold text-slate-500" aria-label="Release console sections">
+                                    <div class="rounded-lg border border-blue-400/10 bg-blue-500/10 px-3 py-2.5 text-blue-200">Overview</div>
+                                    <div class="px-3 py-2.5">API contract</div>
+                                    <div class="px-3 py-2.5">Web surfaces</div>
+                                    <div class="px-3 py-2.5">Provider QA</div>
+                                    <div class="px-3 py-2.5">Governance</div>
+                                </nav>
+                                <div class="mt-8 rounded-xl border border-white/10 bg-white/[0.025] p-3.5">
+                                    <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-600">Architecture</p>
+                                    <p class="mt-2 text-[11px] leading-5 text-slate-300">Clean Architecture<br>Ports & Adapters</p>
+                                </div>
+                            </aside>
 
-                        <div class="mt-6 flex flex-wrap gap-2">
-                            @foreach($project['stack'] as $technology)
-                                <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">{{ $technology }}</span>
-                            @endforeach
+                            <div class="p-5 sm:p-6 lg:p-7">
+                                <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Insurance Claims Legacy Modernization</p>
+                                        <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Release evidence at a glance</h2>
+                                    </div>
+                                    <span class="max-w-48 text-right text-[10px] leading-4 text-slate-600">GREENFIELD · legacy coexistence simulated</span>
+                                </div>
+
+                                <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                    @foreach([
+                                        ['90', 'REST operations'],
+                                        ['76', 'API paths'],
+                                        ['22', 'web surfaces'],
+                                        ['90/90', 'runtime'],
+                                    ] as [$value, $label])
+                                        <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+                                            <p class="text-2xl font-extrabold tracking-tight text-white">{{ $value }}</p>
+                                            <p class="mt-1 text-[10px] font-semibold text-slate-500">{{ $label }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="mt-4 grid gap-3 lg:grid-cols-[1.18fr_0.82fr]">
+                                    <div class="rounded-2xl border border-white/10 bg-[#081321] p-4 sm:p-5">
+                                        <div class="flex items-center justify-between gap-3">
+                                            <div>
+                                                <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Contract coverage</p>
+                                                <p class="mt-1 text-sm font-bold text-white">16 operation families</p>
+                                            </div>
+                                            <span class="rounded-full bg-blue-500/10 px-2.5 py-1 text-[9px] font-bold text-blue-300">api-v1-r3</span>
+                                        </div>
+                                        <div class="mt-5 grid grid-cols-8 gap-1.5" aria-label="Contract coverage visualization">
+                                            @foreach(range(1, 16) as $segment)
+                                                <span class="h-2 rounded-full {{ $segment <= 15 ? 'bg-blue-400/80' : 'bg-cyan-300/80' }}"></span>
+                                            @endforeach
+                                        </div>
+                                        <div class="mt-4 flex items-center justify-between text-[10px] text-slate-600">
+                                            <span>15 inherited</span>
+                                            <span>75 new operations</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-emerald-400/[0.08] to-transparent p-4 sm:p-5">
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Provider-real QA</p>
+                                            <span class="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.75)]"></span>
+                                        </div>
+                                        <p class="mt-3 text-lg font-extrabold text-white">PostgreSQL 18</p>
+                                        <p class="mt-1 text-[10px] leading-4 text-slate-500">Validated against the real database provider.</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 rounded-2xl border border-white/10 bg-white/[0.025] p-4">
+                                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                        <div>
+                                            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Release gates</p>
+                                            <p class="mt-1 text-xs font-bold text-white">OpenAPI · Postman · CI · governed release</p>
+                                        </div>
+                                        <span class="inline-flex items-center gap-2 text-[10px] font-bold text-emerald-300"><span class="h-1.5 w-1.5 rounded-full bg-emerald-300"></span> Zero drift</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5 flex flex-wrap gap-2">
+                                    @foreach(['NestJS 12', 'React 19', 'PostgreSQL 18', 'OpenAPI', 'JWT + RBAC'] as $technology)
+                                        <span class="rounded-full border border-white/10 bg-black/10 px-3 py-1.5 text-[10px] font-semibold text-slate-400">{{ $technology }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                        <ul class="mt-7 space-y-3 text-sm text-slate-600 flex-grow">
-                            @foreach(array_slice($project['evidence'], 0, 3) as $evidence)
-                                <li class="flex gap-3">
-                                    <span class="mt-2 h-1.5 w-1.5 rounded-full bg-secondary-500 shrink-0"></span>
-                                    <span>{{ $evidence }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-
-                        <a href="{{ $project['repository_url'] }}" target="_blank" rel="noreferrer" class="mt-8 inline-flex items-center font-semibold text-primary-700 hover:text-primary-800">
-                            Ver repositorio
-                            <span class="ml-2">→</span>
-                        </a>
-                    </article>
+        <div class="relative border-t border-white/10 bg-white/[0.018]">
+            <div class="mx-auto grid max-w-[1440px] grid-cols-2 px-4 sm:px-6 md:grid-cols-4 lg:px-8">
+                @foreach([
+                    ['90', 'operaciones REST'],
+                    ['76', 'paths API'],
+                    ['22', 'superficies web'],
+                    ['0', 'drift OpenAPI + Postman'],
+                ] as [$value, $label])
+                    <div class="border-white/10 px-4 py-6 first:border-l-0 md:border-l lg:px-7">
+                        <p class="text-2xl font-extrabold text-white sm:text-3xl">{{ $value }}</p>
+                        <p class="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-600">{{ $label }}</p>
+                    </div>
                 @endforeach
             </div>
         </div>
     </section>
 
-    <section class="py-20 sm:py-24 bg-slate-950 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20">
+    @if($flagship)
+        <section class="relative overflow-hidden bg-[#f6f8fb] py-20 sm:py-24 lg:py-28">
+            <div class="absolute left-1/2 top-0 h-72 w-[52rem] -translate-x-1/2 rounded-full bg-blue-100/65 blur-3xl"></div>
+            <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
+                    <div>
+                        <p class="text-xs font-extrabold uppercase tracking-[0.22em] text-blue-600">01 · Flagship case study</p>
+                        <h2 class="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-slate-950 sm:text-5xl">{{ $flagship['name'] }}</h2>
+                        <p class="mt-3 text-sm font-bold text-blue-700">{{ $flagship['eyebrow'] }}</p>
+                        <p class="mt-6 text-lg leading-8 text-slate-600">{{ $flagship['summary'] }}</p>
+                        <p class="mt-6 border-l-2 border-blue-500 pl-5 text-sm font-semibold leading-7 text-slate-700">
+                            90 operaciones REST sobre 76 paths y 16 familias, con reconciliación runtime 90/90 y 22 superficies web productizadas.
+                        </p>
+                        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                            <a href="/proyectos" class="inline-flex items-center justify-center rounded-xl bg-slate-950 px-6 py-3 font-bold text-white transition hover:bg-blue-700">Ver caso de estudio <span class="ml-2">→</span></a>
+                            <a href="{{ $flagship['repository_url'] }}" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 font-bold text-slate-700 transition hover:border-slate-400 hover:text-slate-950">GitHub ↗</a>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                        @foreach([
+                            ['R3 · v0.3.0', 'Release gobernada'],
+                            ['90/90', 'Runtime reconciliation'],
+                            ['16', 'Familias'],
+                            ['22', 'Superficies web'],
+                            ['PostgreSQL 18', 'Provider-real QA'],
+                            ['Zero drift', 'OpenAPI + Postman'],
+                            ['JWT + RBAC', 'Security boundary'],
+                            ['RFC 9457', 'Problem details'],
+                        ] as [$value, $label])
+                            <article class="min-h-32 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100/50">
+                                <p class="text-lg font-extrabold tracking-tight text-slate-950">{{ $value }}</p>
+                                <p class="mt-3 text-xs font-semibold leading-5 text-slate-500">{{ $label }}</p>
+                            </article>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <section class="border-y border-slate-200 bg-white py-20 sm:py-24">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div class="max-w-3xl">
+                    <p class="text-xs font-extrabold uppercase tracking-[0.22em] text-blue-600">Selected work</p>
+                    <h2 class="mt-4 text-3xl font-extrabold tracking-[-0.03em] text-slate-950 sm:text-4xl">Otros proyectos, sin competir con el flagship.</h2>
+                    <p class="mt-4 text-lg text-slate-600">Modernización brownfield y evolución de producto con el mismo criterio: alcance explícito, cambios trazables y evidencia verificable.</p>
+                </div>
+                <a href="/proyectos" class="text-sm font-bold text-blue-700 hover:text-blue-900">Ver portfolio completo →</a>
+            </div>
+
+            <div class="mt-12 grid gap-5 lg:grid-cols-[1fr_1fr_0.68fr]">
+                @foreach($secondaryProjects as $project)
+                    <article class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-[#f8fafc] p-7 transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-2xl hover:shadow-slate-200/70">
+                        <div class="absolute right-0 top-0 h-36 w-36 rounded-full bg-blue-100/60 blur-3xl"></div>
+                        <div class="relative">
+                            <p class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-blue-600">{{ $project['eyebrow'] }}</p>
+                            <h3 class="mt-3 text-2xl font-extrabold text-slate-950">{{ $project['name'] }}</h3>
+                            <p class="mt-5 text-sm leading-6 text-slate-600">{{ $project['summary'] }}</p>
+                            <div class="mt-6 flex flex-wrap gap-2">
+                                @foreach(array_slice($project['stack'], 0, 4) as $technology)
+                                    <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-bold text-slate-600">{{ $technology }}</span>
+                                @endforeach
+                            </div>
+                            <a href="{{ $project['repository_url'] }}" target="_blank" rel="noreferrer" class="mt-7 inline-flex items-center text-sm font-bold text-blue-700">Ver repositorio <span class="ml-2">↗</span></a>
+                        </div>
+                    </article>
+                @endforeach
+
+                <article class="rounded-3xl border border-slate-900 bg-slate-950 p-7 text-white shadow-2xl shadow-slate-300/40">
+                    <p class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-blue-300">GitHub</p>
+                    <h3 class="mt-3 text-2xl font-extrabold">Más ingeniería visible.</h3>
+                    <p class="mt-4 text-sm leading-6 text-slate-400">Repositorios, arquitectura, documentación, CI y evolución pública del trabajo.</p>
+                    <a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="mt-8 inline-flex items-center rounded-xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-bold text-white hover:bg-white/[0.09]">Explorar GitHub ↗</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-[#07111d] py-20 text-white sm:py-24">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
                 <div>
-                    <p class="text-sm font-bold uppercase tracking-[0.18em] text-primary-300">Engineering approach</p>
-                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Arquitectura que explica sus decisiones.</h2>
-                    <p class="mt-5 text-lg text-slate-300 leading-relaxed">La implementación importa, pero también debe quedar claro qué autoridad tiene cada capa, qué se puede reemplazar y qué evidencia demuestra que el sistema cumple sus límites.</p>
+                    <p class="text-xs font-extrabold uppercase tracking-[0.22em] text-blue-300">Engineering approach</p>
+                    <h2 class="mt-4 text-4xl font-extrabold tracking-[-0.035em] sm:text-5xl">La arquitectura también debe contar la historia del sistema.</h2>
+                    <p class="mt-6 max-w-xl text-lg leading-8 text-slate-400">Límites, contratos, autoridad de datos, pruebas y decisiones de entrega deben ser visibles. Esa claridad reduce sorpresas y hace el software más mantenible.</p>
                 </div>
 
-                <ol class="grid sm:grid-cols-2 gap-4">
+                <ol class="grid gap-4 sm:grid-cols-2">
                     @foreach([
-                        ['01', 'Entender el problema', 'Alcance, reglas, riesgos, actores y límites antes de diseñar.'],
-                        ['02', 'Definir contratos', 'Arquitectura, puertos, API, autoridad de datos e invariantes.'],
-                        ['03', 'Implementar por slices', 'Cambios pequeños, trazables y revisables en lugar de megamerges.'],
-                        ['04', 'Probar y evidenciar', 'Tests, CI, revisión funcional, documentación y límites explícitos.'],
+                        ['01', 'Entender', 'Problema, actores, reglas, riesgos y límites.'],
+                        ['02', 'Diseñar', 'Contratos, puertos, invariantes y autoridad.'],
+                        ['03', 'Implementar', 'Slices pequeños, trazables y revisables.'],
+                        ['04', 'Evidenciar', 'Tests, CI, QA, documentación y release.'],
                     ] as [$number, $title, $copy])
-                        <li class="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                            <span class="text-sm font-bold text-primary-300">{{ $number }}</span>
-                            <h3 class="mt-4 text-lg font-bold">{{ $title }}</h3>
-                            <p class="mt-2 text-sm leading-6 text-slate-400">{{ $copy }}</p>
+                        <li class="rounded-2xl border border-white/10 bg-white/[0.035] p-6">
+                            <span class="text-xs font-extrabold text-blue-300">{{ $number }}</span>
+                            <h3 class="mt-4 text-xl font-extrabold">{{ $title }}</h3>
+                            <p class="mt-2 text-sm leading-6 text-slate-500">{{ $copy }}</p>
                         </li>
                     @endforeach
                 </ol>
@@ -175,36 +287,15 @@
         </div>
     </section>
 
-    <section class="py-20 sm:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 items-start">
-                <div>
-                    <p class="text-sm font-bold uppercase tracking-[0.18em] text-primary-600">Core technologies</p>
-                    <h2 class="mt-3 text-3xl font-bold text-slate-950">Stack actual, sin inflar la lista.</h2>
-                    <p class="mt-4 text-slate-600">Tecnologías que aparecen de forma material en los proyectos seleccionados y en el trabajo activo.</p>
+    <section class="bg-[#f6f8fb] py-20 sm:py-24">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="overflow-hidden rounded-[2rem] bg-blue-600 px-6 py-12 text-white shadow-[0_35px_90px_rgba(37,99,235,0.24)] sm:px-10 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-14 lg:py-14">
+                <div class="max-w-3xl">
+                    <p class="text-xs font-extrabold uppercase tracking-[0.22em] text-blue-100">Build something useful</p>
+                    <h2 class="mt-3 text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl">¿Necesitas modernizar un sistema o sumar capacidad de ingeniería?</h2>
+                    <p class="mt-4 text-lg text-blue-100">Backend, APIs, arquitectura, modernización legacy y software transaccional con evidencia desde el primer slice.</p>
                 </div>
-                <div class="flex flex-wrap gap-3">
-                    @foreach(['C#', '.NET', 'TypeScript', 'Node.js', 'NestJS', 'PHP', 'Laravel', 'React', 'JavaScript', 'WordPress', 'WooCommerce', 'PostgreSQL', 'MySQL', 'Entity Framework Core', 'Prisma', 'OpenAPI', 'GitHub Actions'] as $technology)
-                        <span class="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700">{{ $technology }}</span>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="pb-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative overflow-hidden rounded-3xl bg-primary-700 px-6 py-12 sm:px-10 lg:px-14 lg:py-16 text-white">
-                <div class="absolute right-0 top-0 h-64 w-64 rounded-full bg-secondary-500/20 blur-3xl"></div>
-                <div class="relative max-w-3xl">
-                    <p class="text-sm font-bold uppercase tracking-[0.18em] text-primary-100">Let's build something useful</p>
-                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold">¿Necesitas modernizar un sistema o sumar capacidad de ingeniería?</h2>
-                    <p class="mt-5 text-lg text-primary-100">Podemos conversar sobre backend, APIs, arquitectura, modernización legacy o una aplicación de negocio que necesite pasar de idea a sistema verificable.</p>
-                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                        <a href="/contacto" class="inline-flex justify-center rounded-full bg-white px-6 py-3 font-semibold text-primary-800 hover:bg-primary-50 transition-colors">Contactar</a>
-                        <a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="inline-flex justify-center rounded-full border border-white/30 px-6 py-3 font-semibold text-white hover:bg-white/10 transition-colors">Revisar GitHub</a>
-                    </div>
-                </div>
+                <a href="/contacto" class="mt-8 inline-flex shrink-0 items-center justify-center rounded-xl bg-white px-6 py-3.5 font-extrabold text-blue-700 transition hover:-translate-y-0.5 hover:bg-blue-50 lg:mt-0">Conversemos →</a>
             </div>
         </div>
     </section>
