@@ -53,7 +53,7 @@ class ContactForm extends Component
             $this->selectedApp = Application::where('slug', $this->appSlug)->first();
             if ($this->selectedApp) {
                 $this->application_id = $this->selectedApp->id;
-                $this->message = "Estoy interesado en obtener una demo de: " . $this->selectedApp->name . ".\n\n";
+                $this->message = "Estoy interesado en conversar sobre: " . $this->selectedApp->name . ".\n\n";
             }
         }
     }
@@ -64,7 +64,7 @@ class ContactForm extends Component
 
         $executed = RateLimiter::attempt(
             'contact-form:'.request()->ip(),
-            3, // Max 3 requests
+            3,
             function () {
                 app(SubmitContactRequestUseCase::class)->execute([
                     'name' => $this->name,
@@ -77,11 +77,11 @@ class ContactForm extends Component
                 ]);
 
                 $this->isSubmitted = true;
-                $this->successMessage = '¡Gracias por contactarnos! Hemos recibido tu mensaje y te responderemos a la brevedad.';
+                $this->successMessage = 'Gracias por escribir. Recibí tu mensaje correctamente.';
 
                 $this->reset(['name', 'email', 'company', 'phone', 'whatsapp', 'message']);
             },
-            60 * 60 // 1 hour block if they exceed
+            60 * 60
         );
 
         if (! $executed) {
