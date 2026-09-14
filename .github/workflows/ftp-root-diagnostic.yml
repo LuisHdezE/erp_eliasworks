@@ -1,7 +1,7 @@
 name: EliasWorks FTP Root Diagnostic
 
 # Read-only production diagnostics. Never merge this workflow.
-# Verification trigger after PR #8 production deployment.
+# Verification trigger after PR #9 production deployment.
 on:
   pull_request:
     branches: [ main ]
@@ -110,12 +110,15 @@ jobs:
           done
           rm -f /tmp/prod.env
 
-      - name: Probe public HTTP status without failing job
+      - name: Probe premium Home in production without failing job
         run: |
           set -euo pipefail
           status=$(curl --silent --show-error --location --output /tmp/live-home.html --write-out '%{http_code}' https://eliasworks.uy/ || true)
           echo "LIVE_HTTP_STATUS=${status}"
           if [ "$status" = '200' ]; then
-            grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'LIVE_HAS_CURRENT_HOME=true' || echo 'LIVE_HAS_CURRENT_HOME=false'
+            grep -Fq 'Ingeniería de software' /tmp/live-home.html && echo 'LIVE_HAS_PREMIUM_HEADLINE=true' || echo 'LIVE_HAS_PREMIUM_HEADLINE=false'
+            grep -Fq 'con impacto real.' /tmp/live-home.html && echo 'LIVE_HAS_PREMIUM_SUBHEAD=true' || echo 'LIVE_HAS_PREMIUM_SUBHEAD=false'
+            grep -Fq 'InsuranceClaims · Release Console' /tmp/live-home.html && echo 'LIVE_HAS_RELEASE_CONSOLE=true' || echo 'LIVE_HAS_RELEASE_CONSOLE=false'
+            grep -Fq 'Release evidence at a glance' /tmp/live-home.html && echo 'LIVE_HAS_RELEASE_EVIDENCE_PANEL=true' || echo 'LIVE_HAS_RELEASE_EVIDENCE_PANEL=false'
             grep -Fq 'Elias Works | Engineering Solutions & Software Development' /tmp/live-home.html && echo 'LIVE_HAS_OLD_TITLE=true' || echo 'LIVE_HAS_OLD_TITLE=false'
           fi
