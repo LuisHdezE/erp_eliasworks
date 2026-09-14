@@ -10,7 +10,7 @@
     $defaultTitle = config('portfolio.site.name', 'EliasWorks');
     $defaultDescription = config(
         'portfolio.site.description',
-        'Software engineering portfolio focused on backend, APIs, legacy modernization and transactional applications.'
+        'Software development portfolio focused on backend, APIs, legacy modernization and transactional applications.'
     );
 
     $finalTitle = $title ? "{$title} | {$defaultTitle}" : $defaultTitle;
