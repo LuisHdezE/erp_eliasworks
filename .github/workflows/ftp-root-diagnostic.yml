@@ -51,6 +51,7 @@ jobs:
 
           grep -Fq 'InsuranceClaims · Release Console' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_RELEASE_CONSOLE=true' || echo 'REMOTE_HOME_HAS_RELEASE_CONSOLE=false'
           grep -Fq 'Ingeniería de software' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=true' || echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=false'
+          grep -Fq 'con impacto real.' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_IMPACT_LINE=true' || echo 'REMOTE_HOME_HAS_IMPACT_LINE=false'
 
       - name: Inspect compiled Blade views read-only
         env:
@@ -84,13 +85,15 @@ jobs:
           echo "COMPILED_PREMIUM_HOME_MATCHES=${premium}"
           echo "COMPILED_PREVIOUS_HOME_MATCHES=${legacy_hero}"
 
-      - name: Probe live premium Home without failing job
+      - name: Probe live flagship v2 Home without failing job
         run: |
           set -euo pipefail
           status=$(curl --silent --show-error --location --output /tmp/live-home.html --write-out '%{http_code}' https://eliasworks.uy/ || true)
           echo "LIVE_HTTP_STATUS=${status}"
           if [ "$status" = '200' ]; then
-            grep -Fq 'Ingeniería de software' /tmp/live-home.html && echo 'LIVE_HAS_PREMIUM_HEADLINE=true' || echo 'LIVE_HAS_PREMIUM_HEADLINE=false'
+            grep -Fq 'Ingeniería de software' /tmp/live-home.html && echo 'LIVE_HAS_V2_HEADLINE=true' || echo 'LIVE_HAS_V2_HEADLINE=false'
+            grep -Fq 'con impacto real.' /tmp/live-home.html && echo 'LIVE_HAS_V2_IMPACT=true' || echo 'LIVE_HAS_V2_IMPACT=false'
             grep -Fq 'InsuranceClaims · Release Console' /tmp/live-home.html && echo 'LIVE_HAS_RELEASE_CONSOLE=true' || echo 'LIVE_HAS_RELEASE_CONSOLE=false'
-            grep -Fq 'Construyo y modernizo software de negocio que debe' /tmp/live-home.html && echo 'LIVE_HAS_PREVIOUS_HERO=true' || echo 'LIVE_HAS_PREVIOUS_HERO=false'
+            grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'LIVE_HAS_CURRENT_POSITIONING=true' || echo 'LIVE_HAS_CURRENT_POSITIONING=false'
+            grep -Fq 'Elias Works | Engineering Solutions & Software Development' /tmp/live-home.html && echo 'LIVE_HAS_OLD_TITLE=true' || echo 'LIVE_HAS_OLD_TITLE=false'
           fi
