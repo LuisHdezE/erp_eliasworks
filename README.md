@@ -1,12 +1,12 @@
 # EliasWorks
 
-Professional software-engineering portfolio and application lab maintained by **Luis A. Hernández Elias**.
+Professional software-development portfolio and application lab maintained by **Luis A. Hernández Elias**.
 
-The public site is deployed at `eliasworks.uy` and is being repositioned around evidence-backed engineering work: backend architecture, APIs, legacy modernization, transactional systems and business-facing interfaces.
+The public site is deployed at `eliasworks.uy` and is being positioned around evidence-backed software development work: backend architecture, APIs, legacy modernization, transactional systems and business-facing interfaces.
 
 ## Portfolio direction
 
-The primary public narrative is built around selected engineering case studies rather than a generic agency catalogue:
+The primary public narrative is built around selected development case studies rather than a generic agency catalogue:
 
 - **InsuranceClaims**: R3 `v0.3.0` full-product modernization case study with TypeScript, NestJS, React, PostgreSQL, Clean Architecture, 90 REST operations, 22 productized web surfaces and governed release evidence.
 - **eFactura**: .NET 10 brownfield modernization for Uruguay electronic invoicing and transactional sales.
@@ -54,7 +54,7 @@ Public routes are implemented as Livewire page components. Portfolio case-study 
 
 ```text
 /             Professional home
-/proyectos    Selected engineering case studies
+/proyectos    Selected development case studies
 /servicios    Services
 /proceso      Delivery process
 /contacto     Contact
@@ -131,7 +131,7 @@ The current portfolio foundation focuses on:
 - professional positioning;
 - selected case studies;
 - navigation and information hierarchy;
-- explicit engineering principles and stack;
+- explicit architecture and development practices;
 - responsive public presentation;
 - pre-merge validation before the existing production deploy workflow.
 
