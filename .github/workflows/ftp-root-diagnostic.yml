@@ -1,7 +1,6 @@
 name: EliasWorks FTP Root Diagnostic
 
 # Read-only production diagnostics. Never merge this workflow.
-# Verification trigger after PR #9 production deployment.
 on:
   pull_request:
     branches: [ main ]
@@ -20,105 +19,78 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify repaired production front controller read-only
+      - name: Compare deployed visual sources read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
-          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
-            ftp://ftp.eliasworks.uy/public_html/public/index.php \
-            --output /tmp/remote-index.php
-          echo "LOCAL_INDEX_BYTES=$(wc -c < public/index.php)"
-          echo "REMOTE_INDEX_BYTES=$(wc -c < /tmp/remote-index.php)"
-          echo "LOCAL_INDEX_SHA256=$(sha256sum public/index.php | cut -d' ' -f1)"
-          echo "REMOTE_INDEX_SHA256=$(sha256sum /tmp/remote-index.php | cut -d' ' -f1)"
-          grep -Fq "require __DIR__.'/../vendor/autoload.php'" /tmp/remote-index.php && echo 'REMOTE_HAS_LARAVEL_AUTOLOAD=true' || echo 'REMOTE_HAS_LARAVEL_AUTOLOAD=false'
-          grep -Fq "require_once __DIR__.'/../bootstrap/app.php'" /tmp/remote-index.php && echo 'REMOTE_HAS_LARAVEL_BOOTSTRAP=true' || echo 'REMOTE_HAS_LARAVEL_BOOTSTRAP=false'
-          grep -Fq 'handleRequest' /tmp/remote-index.php && echo 'REMOTE_HAS_HANDLE_REQUEST=true' || echo 'REMOTE_HAS_HANDLE_REQUEST=false'
-          grep -Fqi '<!DOCTYPE html' /tmp/remote-index.php && echo 'REMOTE_HAS_HTML_DOCUMENT=true' || echo 'REMOTE_HAS_HTML_DOCUMENT=false'
 
-      - name: Classify production PDO failure read-only
-        env:
-          FTP_USER: luis@eliasworks.uy
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          set -euo pipefail
-          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
-            ftp://ftp.eliasworks.uy/public_html/storage/logs/laravel.log \
-            --output /tmp/laravel.log
-          tail -n 1000 /tmp/laravel.log > /tmp/recent.log
-
-          probe() {
+          compare_file() {
             local key="$1"
-            local pattern="$2"
-            if grep -Eiq "$pattern" /tmp/recent.log; then echo "${key}=true"; else echo "${key}=false"; fi
+            local local_path="$2"
+            local remote_path="$3"
+            local remote_file="/tmp/${key}.remote"
+            curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
+              "ftp://ftp.eliasworks.uy/public_html/${remote_path}" \
+              --output "${remote_file}"
+            echo "${key}_LOCAL_BYTES=$(wc -c < "${local_path}")"
+            echo "${key}_REMOTE_BYTES=$(wc -c < "${remote_file}")"
+            echo "${key}_LOCAL_SHA256=$(sha256sum "${local_path}" | cut -d' ' -f1)"
+            echo "${key}_REMOTE_SHA256=$(sha256sum "${remote_file}" | cut -d' ' -f1)"
+            if cmp -s "${local_path}" "${remote_file}"; then
+              echo "${key}_MATCH=true"
+            else
+              echo "${key}_MATCH=false"
+            fi
           }
 
-          probe DB_ACCESS_DENIED 'Access denied for user|authentication failed'
-          probe DB_CONNECTION_REFUSED 'Connection refused|actively refused'
-          probe DB_HOST_RESOLUTION 'php_network_getaddresses|getaddrinfo|Name or service not known|Temporary failure in name resolution'
-          probe DB_UNKNOWN_DATABASE 'Unknown database'
-          probe DB_TABLE_MISSING 'Base table or view not found|no such table|doesn.t exist.*table'
-          probe DB_COLUMN_MISSING 'Unknown column|no such column'
-          probe DB_TOO_MANY_CONNECTIONS 'Too many connections'
-          probe DB_SOCKET_FAILURE 'SQLSTATE\[HY000\].*\[2002\].*No such file|Can.t connect to local server through socket'
-          probe DB_TIMEOUT 'Connection timed out|Operation timed out'
-          probe DB_SERVER_GONE 'server has gone away|Lost connection to MySQL server'
-          probe DB_INTEGRITY 'Integrity constraint violation'
+          compare_file HOME resources/views/livewire/pages/home-page.blade.php resources/views/livewire/pages/home-page.blade.php
+          compare_file LAYOUT resources/views/components/layouts/app.blade.php resources/views/components/layouts/app.blade.php
+          compare_file CSS resources/css/app.css resources/css/app.css
 
-          SQLSTATE=$(grep -Eo 'SQLSTATE\[[A-Z0-9]+\]' /tmp/recent.log | tail -1 || true)
-          MYSQL_CODE=$(grep -Eo '\[[0-9]{4}\]' /tmp/recent.log | tail -1 || true)
-          echo "LATEST_SQLSTATE=${SQLSTATE:-unresolved}"
-          echo "LATEST_DB_CODE=${MYSQL_CODE:-unresolved}"
+          grep -Fq 'InsuranceClaims · Release Console' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_RELEASE_CONSOLE=true' || echo 'REMOTE_HOME_HAS_RELEASE_CONSOLE=false'
+          grep -Fq 'Ingeniería de software' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=true' || echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=false'
 
-          LAST_EXCEPTION_CLASS=$(grep -Eo '\[object\] \([A-Za-z0-9_\\]+Exception' /tmp/recent.log | tail -1 | sed -E 's/^\[object\] \(//' || true)
-          echo "LAST_EXCEPTION_CLASS=${LAST_EXCEPTION_CLASS:-unresolved}"
-
-      - name: Inspect non-secret production environment shape read-only
+      - name: Inspect compiled Blade views read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
-          if ! curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
-            ftp://ftp.eliasworks.uy/public_html/.env --output /tmp/prod.env; then
-            echo 'PRODUCTION_ENV_READABLE=false'
-            exit 0
-          fi
-          echo 'PRODUCTION_ENV_READABLE=true'
+          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" \
+            ftp://ftp.eliasworks.uy/public_html/storage/framework/views/ \
+            --output /tmp/view-files.txt
 
-          safe_value() {
-            local key="$1"
-            local value
-            value=$(grep -E "^${key}=" /tmp/prod.env | tail -1 | cut -d= -f2- | tr -d '\r' || true)
-            case "$value" in
-              mysql|mariadb|pgsql|sqlite|file|database|redis|array|sync|log) echo "${key}=${value}" ;;
-              '') echo "${key}=missing_or_empty" ;;
-              *) echo "${key}=configured" ;;
+          total=0
+          premium=0
+          legacy_hero=0
+          while IFS= read -r file; do
+            case "$file" in
+              *.php)
+                total=$((total + 1))
+                tmp="/tmp/compiled-${total}.php"
+                if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
+                  "ftp://ftp.eliasworks.uy/public_html/storage/framework/views/${file}" \
+                  --output "$tmp"; then
+                  if grep -Fq 'InsuranceClaims · Release Console' "$tmp"; then premium=$((premium + 1)); fi
+                  if grep -Fq 'Construyo y modernizo software de negocio que debe' "$tmp"; then legacy_hero=$((legacy_hero + 1)); fi
+                fi
+                ;;
             esac
-          }
+          done < /tmp/view-files.txt
 
-          safe_value DB_CONNECTION
-          safe_value SESSION_DRIVER
-          safe_value CACHE_STORE
-          safe_value QUEUE_CONNECTION
+          echo "COMPILED_VIEW_COUNT=${total}"
+          echo "COMPILED_PREMIUM_HOME_MATCHES=${premium}"
+          echo "COMPILED_PREVIOUS_HOME_MATCHES=${legacy_hero}"
 
-          for key in DB_HOST DB_PORT DB_DATABASE DB_USERNAME DB_PASSWORD APP_KEY; do
-            value=$(grep -E "^${key}=" /tmp/prod.env | tail -1 | cut -d= -f2- | tr -d '\r' || true)
-            if [ -n "$value" ]; then echo "${key}_PRESENT=true"; else echo "${key}_PRESENT=false"; fi
-          done
-          rm -f /tmp/prod.env
-
-      - name: Probe premium Home in production without failing job
+      - name: Probe live premium Home without failing job
         run: |
           set -euo pipefail
           status=$(curl --silent --show-error --location --output /tmp/live-home.html --write-out '%{http_code}' https://eliasworks.uy/ || true)
           echo "LIVE_HTTP_STATUS=${status}"
           if [ "$status" = '200' ]; then
             grep -Fq 'Ingeniería de software' /tmp/live-home.html && echo 'LIVE_HAS_PREMIUM_HEADLINE=true' || echo 'LIVE_HAS_PREMIUM_HEADLINE=false'
-            grep -Fq 'con impacto real.' /tmp/live-home.html && echo 'LIVE_HAS_PREMIUM_SUBHEAD=true' || echo 'LIVE_HAS_PREMIUM_SUBHEAD=false'
             grep -Fq 'InsuranceClaims · Release Console' /tmp/live-home.html && echo 'LIVE_HAS_RELEASE_CONSOLE=true' || echo 'LIVE_HAS_RELEASE_CONSOLE=false'
-            grep -Fq 'Release evidence at a glance' /tmp/live-home.html && echo 'LIVE_HAS_RELEASE_EVIDENCE_PANEL=true' || echo 'LIVE_HAS_RELEASE_EVIDENCE_PANEL=false'
-            grep -Fq 'Elias Works | Engineering Solutions & Software Development' /tmp/live-home.html && echo 'LIVE_HAS_OLD_TITLE=true' || echo 'LIVE_HAS_OLD_TITLE=false'
+            grep -Fq 'Construyo y modernizo software de negocio que debe' /tmp/live-home.html && echo 'LIVE_HAS_PREVIOUS_HERO=true' || echo 'LIVE_HAS_PREVIOUS_HERO=false'
           fi
