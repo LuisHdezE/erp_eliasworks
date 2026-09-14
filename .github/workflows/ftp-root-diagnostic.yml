@@ -1,5 +1,6 @@
 name: EliasWorks FTP Root Diagnostic
 
+# Post-PR7 production verification. Read-only against the hosting target.
 on:
   pull_request:
     branches: [ main ]
