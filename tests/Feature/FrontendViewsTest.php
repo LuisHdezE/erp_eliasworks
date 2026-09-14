@@ -25,6 +25,9 @@ class FrontendViewsTest extends TestCase
             ->assertSee('Insurance Claims Legacy Modernization')
             ->assertSee('R3 full-product release · v0.3.0')
             ->assertSee('90 operaciones REST sobre 76 paths y 16 familias')
+            ->assertSee('PostgreSQL 18')
+            ->assertSee('Validated against the real database provider.')
+            ->assertDontSee('18 provider-real QA scenarios')
             ->assertSee('eFactura')
             ->assertSee('ZoFloridane');
     }
