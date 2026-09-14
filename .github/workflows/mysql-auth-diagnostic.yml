@@ -1,4 +1,4 @@
-name: EliasWorks MySQL 1045 Diagnostic
+name: EliasWorks MySQL 1045 Identity Diagnostic
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   diagnose:
-    name: Inspect production DB configuration safely
+    name: Verify production MySQL identity safely
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,10 @@ jobs:
           php-version: '8.3'
           coverage: none
 
-      - name: Fetch production configuration read-only
+      - name: Install runtime dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress --no-scripts
+
+      - name: Fetch production env and Laravel log read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
@@ -34,83 +37,22 @@ jobs:
           curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
             ftp://ftp.eliasworks.uy/public_html/.env \
             --output /tmp/prod.env
-
-          if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
-            ftp://ftp.eliasworks.uy/public_html/bootstrap/cache/config.php \
-            --output /tmp/prod-config-cache.php; then
-            echo 'REMOTE_CONFIG_CACHE_PRESENT=true'
-          else
-            rm -f /tmp/prod-config-cache.php
-            echo 'REMOTE_CONFIG_CACHE_PRESENT=false'
-          fi
-
-          if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
+          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
             ftp://ftp.eliasworks.uy/public_html/storage/logs/laravel.log \
-            --output /tmp/prod-laravel.log; then
-            echo 'REMOTE_LARAVEL_LOG_PRESENT=true'
-          else
-            rm -f /tmp/prod-laravel.log
-            echo 'REMOTE_LARAVEL_LOG_PRESENT=false'
-          fi
+            --output /tmp/prod-laravel.log
 
-      - name: Validate env shape without exposing values
-        run: |
-          python3 <<'PY'
-          from pathlib import Path
-
-          raw = Path('/tmp/prod.env').read_text(errors='replace').splitlines()
-          values = {}
-          counts = {}
-          raw_values = {}
-
-          for line in raw:
-              stripped = line.strip()
-              if not stripped or stripped.startswith('#') or '=' not in line:
-                  continue
-              key, value = line.split('=', 1)
-              key = key.strip()
-              value = value.strip()
-              counts[key] = counts.get(key, 0) + 1
-              raw_values[key] = value
-              if len(value) >= 2 and value[0] == value[-1] and value[0] in {'\'', '"'}:
-                  value = value[1:-1]
-              values[key] = value
-
-          def yes(name, condition):
-              print(f'{name}={"true" if condition else "false"}')
-
-          yes('ENV_PRESENT', bool(raw))
-          yes('APP_ENV_IS_PRODUCTION', values.get('APP_ENV', '').lower() == 'production')
-          yes('APP_DEBUG_IS_FALSE', values.get('APP_DEBUG', '').lower() in {'false', '0', 'off', 'no'})
-          yes('DB_CONNECTION_IS_MYSQL', values.get('DB_CONNECTION', '').lower() == 'mysql')
-          yes('DB_HOST_CONFIGURED', bool(values.get('DB_HOST', '')))
-          yes('DB_HOST_IS_LOCAL', values.get('DB_HOST', '').lower() in {'localhost', '127.0.0.1'})
-          yes('DB_PORT_CONFIGURED', bool(values.get('DB_PORT', '')))
-          yes('DB_DATABASE_CONFIGURED', bool(values.get('DB_DATABASE', '')))
-          yes('DB_USERNAME_CONFIGURED', bool(values.get('DB_USERNAME', '')))
-          yes('DB_PASSWORD_CONFIGURED', bool(values.get('DB_PASSWORD', '')))
-          yes('DB_CONNECTION_DUPLICATED', counts.get('DB_CONNECTION', 0) > 1)
-          yes('DB_HOST_DUPLICATED', counts.get('DB_HOST', 0) > 1)
-          yes('DB_DATABASE_DUPLICATED', counts.get('DB_DATABASE', 0) > 1)
-          yes('DB_USERNAME_DUPLICATED', counts.get('DB_USERNAME', 0) > 1)
-          yes('DB_PASSWORD_DUPLICATED', counts.get('DB_PASSWORD', 0) > 1)
-
-          pw_raw = raw_values.get('DB_PASSWORD', '')
-          quoted = len(pw_raw) >= 2 and pw_raw[0] == pw_raw[-1] and pw_raw[0] in {'\'', '"'}
-          yes('DB_PASSWORD_QUOTED', quoted)
-          yes('DB_PASSWORD_HAS_UNQUOTED_HASH_RISK', (not quoted) and '#' in pw_raw)
-          yes('DB_PASSWORD_HAS_UNQUOTED_SPACE_RISK', (not quoted) and any(c.isspace() for c in pw_raw))
-          yes('SESSION_DRIVER_IS_DATABASE', values.get('SESSION_DRIVER', '').lower() == 'database')
-          yes('CACHE_STORE_IS_DATABASE', values.get('CACHE_STORE', '').lower() == 'database')
-          yes('QUEUE_CONNECTION_IS_DATABASE', values.get('QUEUE_CONNECTION', '').lower() == 'database')
-          PY
-
-      - name: Compare cached DB config with env without exposing values
+      - name: Compare Dotenv interpretation and rejected identity
         run: |
           php <<'PHP'
           <?php
-          function parseEnvFile(string $path): array {
-              $result = [];
+          require __DIR__ . '/vendor/autoload.php';
+
+          function flag(string $name, bool $value): void {
+              echo $name . '=' . ($value ? 'true' : 'false') . PHP_EOL;
+          }
+
+          function rawEnv(string $path): array {
+              $values = [];
               foreach (file($path, FILE_IGNORE_NEW_LINES) ?: [] as $line) {
                   $trimmed = trim($line);
                   if ($trimmed === '' || str_starts_with($trimmed, '#') || !str_contains($line, '=')) {
@@ -122,59 +64,48 @@ jobs:
                   if (strlen($value) >= 2 && (($value[0] === '"' && $value[-1] === '"') || ($value[0] === "'" && $value[-1] === "'"))) {
                       $value = substr($value, 1, -1);
                   }
-                  $result[$key] = $value;
+                  $values[$key] = $value;
               }
-              return $result;
+              return $values;
           }
 
-          function flag(string $name, bool $value): void {
-              echo $name . '=' . ($value ? 'true' : 'false') . PHP_EOL;
+          $raw = rawEnv('/tmp/prod.env');
+          $parsed = [];
+          try {
+              $parsed = Dotenv\Dotenv::createImmutable('/tmp', 'prod.env')->safeLoad();
+              flag('DOTENV_PARSE_SUCCESS', true);
+          } catch (Throwable $e) {
+              flag('DOTENV_PARSE_SUCCESS', false);
           }
 
-          $env = parseEnvFile('/tmp/prod.env');
-          $cachePath = '/tmp/prod-config-cache.php';
-          if (!file_exists($cachePath)) {
-              flag('CACHED_CONFIG_COMPARISON_AVAILABLE', false);
-              exit(0);
+          foreach (['DB_HOST', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD'] as $key) {
+              flag('DOTENV_' . $key . '_MATCHES_RAW', isset($raw[$key], $parsed[$key]) && hash_equals((string)$raw[$key], (string)$parsed[$key]));
           }
 
-          $config = require $cachePath;
-          $mysql = $config['database']['connections']['mysql'] ?? [];
-          flag('CACHED_CONFIG_COMPARISON_AVAILABLE', true);
-          flag('CACHED_DB_DEFAULT_IS_MYSQL', ($config['database']['default'] ?? null) === 'mysql');
-          flag('CACHED_DB_HOST_MATCHES_ENV', (string)($mysql['host'] ?? '') === (string)($env['DB_HOST'] ?? ''));
-          flag('CACHED_DB_PORT_MATCHES_ENV', (string)($mysql['port'] ?? '') === (string)($env['DB_PORT'] ?? ''));
-          flag('CACHED_DB_DATABASE_MATCHES_ENV', (string)($mysql['database'] ?? '') === (string)($env['DB_DATABASE'] ?? ''));
-          flag('CACHED_DB_USERNAME_MATCHES_ENV', (string)($mysql['username'] ?? '') === (string)($env['DB_USERNAME'] ?? ''));
-          flag('CACHED_DB_PASSWORD_MATCHES_ENV', (string)($mysql['password'] ?? '') === (string)($env['DB_PASSWORD'] ?? ''));
+          $userPrefix = isset($parsed['DB_USERNAME']) ? explode('_', (string)$parsed['DB_USERNAME'], 2)[0] : '';
+          $dbPrefix = isset($parsed['DB_DATABASE']) ? explode('_', (string)$parsed['DB_DATABASE'], 2)[0] : '';
+          flag('DB_USERNAME_AND_DATABASE_SHARE_PREFIX', $userPrefix !== '' && $dbPrefix !== '' && hash_equals($userPrefix, $dbPrefix));
+
+          $log = file_get_contents('/tmp/prod-laravel.log') ?: '';
+          preg_match_all("/Access denied for user '([^']+)'@'([^']+)' \\(using password: (YES|NO)\\)/", $log, $matches, PREG_SET_ORDER);
+          flag('ACCESS_DENIED_PATTERN_FOUND', count($matches) > 0);
+          flag('LOG_HAS_UNKNOWN_DATABASE', str_contains($log, 'Unknown database'));
+          flag('LOG_HAS_DATABASE_PRIVILEGE_DENIED', preg_match('/Access denied for user .* to database /', $log) === 1);
+
+          if ($matches) {
+              $latest = $matches[array_key_last($matches)];
+              flag('LATEST_REJECTED_USERNAME_MATCHES_DOTENV', isset($parsed['DB_USERNAME']) && hash_equals((string)$parsed['DB_USERNAME'], (string)$latest[1]));
+              flag('LATEST_REJECTED_HOST_IS_LOCAL', in_array(strtolower((string)$latest[2]), ['localhost', '127.0.0.1'], true));
+              flag('LATEST_REJECTED_ATTEMPT_USED_PASSWORD', strtoupper((string)$latest[3]) === 'YES');
+          }
           PHP
 
-      - name: Inspect Laravel log signature without exposing credentials
+      - name: Confirm affected public routes
         run: |
           set -euo pipefail
-          if [ -f /tmp/prod-laravel.log ]; then
-            grep -Fq 'SQLSTATE[HY000] [1045]' /tmp/prod-laravel.log && echo 'LARAVEL_LOG_HAS_MYSQL_1045=true' || echo 'LARAVEL_LOG_HAS_MYSQL_1045=false'
-            grep -Fq 'Access denied for user' /tmp/prod-laravel.log && echo 'LARAVEL_LOG_HAS_ACCESS_DENIED=true' || echo 'LARAVEL_LOG_HAS_ACCESS_DENIED=false'
-          else
-            echo 'LARAVEL_LOG_HAS_MYSQL_1045=unknown'
-            echo 'LARAVEL_LOG_HAS_ACCESS_DENIED=unknown'
-          fi
-
-      - name: Probe public routes
-        run: |
-          set -euo pipefail
-          probe() {
-            local key="$1"
-            local path="$2"
-            local file="/tmp/${key}.html"
-            local status
-            status=$(curl --silent --show-error --location --output "$file" --write-out '%{http_code}' "https://eliasworks.uy${path}" || true)
+          for entry in 'HOME /' 'SERVICES /servicios' 'CATALOG /catalogo' 'CONTACT /contacto' 'PROCESS /proceso'; do
+            key="${entry%% *}"
+            path="${entry#* }"
+            status=$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' "https://eliasworks.uy${path}" || true)
             echo "${key}_HTTP_STATUS=${status}"
-            grep -Fq 'SQLSTATE[HY000] [1045]' "$file" && echo "${key}_BODY_HAS_MYSQL_1045=true" || echo "${key}_BODY_HAS_MYSQL_1045=false"
-          }
-
-          probe HOME /
-          probe SERVICES /servicios
-          probe CATALOG /catalogo
-          probe CONTACT /contacto
-          probe PROCESS /proceso
+          done
