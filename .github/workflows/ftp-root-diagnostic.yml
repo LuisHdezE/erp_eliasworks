@@ -53,38 +53,6 @@ jobs:
           grep -Fq 'Ingeniería de software' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=true' || echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=false'
           grep -Fq 'con impacto real.' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_IMPACT_LINE=true' || echo 'REMOTE_HOME_HAS_IMPACT_LINE=false'
 
-      - name: Inspect compiled Blade views read-only
-        env:
-          FTP_USER: luis@eliasworks.uy
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          set -euo pipefail
-          curl --silent --show-error --fail --list-only --user "${FTP_USER}:${FTP_PASSWORD}" \
-            ftp://ftp.eliasworks.uy/public_html/storage/framework/views/ \
-            --output /tmp/view-files.txt
-
-          total=0
-          premium=0
-          legacy_hero=0
-          while IFS= read -r file; do
-            case "$file" in
-              *.php)
-                total=$((total + 1))
-                tmp="/tmp/compiled-${total}.php"
-                if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
-                  "ftp://ftp.eliasworks.uy/public_html/storage/framework/views/${file}" \
-                  --output "$tmp"; then
-                  if grep -Fq 'InsuranceClaims · Release Console' "$tmp"; then premium=$((premium + 1)); fi
-                  if grep -Fq 'Construyo y modernizo software de negocio que debe' "$tmp"; then legacy_hero=$((legacy_hero + 1)); fi
-                fi
-                ;;
-            esac
-          done < /tmp/view-files.txt
-
-          echo "COMPILED_VIEW_COUNT=${total}"
-          echo "COMPILED_PREMIUM_HOME_MATCHES=${premium}"
-          echo "COMPILED_PREVIOUS_HOME_MATCHES=${legacy_hero}"
-
       - name: Probe live flagship v2 Home without failing job
         run: |
           set -euo pipefail
