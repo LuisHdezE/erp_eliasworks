@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'site' => [
+        'name' => 'EliasWorks',
+        'description' => 'Portfolio de software engineering de Luis A. Hernández Elias: backend, APIs, modernización legacy y aplicaciones transaccionales con evidencia técnica verificable.',
+    ],
+
     'case_studies' => [
         [
             'name' => 'Insurance Claims Legacy Modernization',
