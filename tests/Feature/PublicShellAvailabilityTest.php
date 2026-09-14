@@ -21,7 +21,7 @@ class PublicShellAvailabilityTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('<title>EliasWorks</title>', false)
-            ->assertSee('Construyo y modernizo software de negocio')
-            ->assertSee('Portfolio de software engineering de Luis A. Hernández Elias');
+            ->assertSee('Desarrollo de software')
+            ->assertSee('Portfolio de desarrollo de software de Luis A. Hernández Elias');
     }
 }
