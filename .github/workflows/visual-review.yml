@@ -35,6 +35,7 @@ jobs:
           php artisan key:generate
           touch database/database.sqlite
           printf '\nDB_CONNECTION=sqlite\nDB_DATABASE=%s/database/database.sqlite\n' "$GITHUB_WORKSPACE" >> .env
+          php artisan migrate --force
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
