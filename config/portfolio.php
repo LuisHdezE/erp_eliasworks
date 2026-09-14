@@ -3,7 +3,7 @@
 return [
     'site' => [
         'name' => 'EliasWorks',
-        'description' => 'Portfolio de software engineering de Luis A. Hernández Elias: backend, APIs, modernización legacy y aplicaciones transaccionales con evidencia técnica verificable.',
+        'description' => 'Portfolio de desarrollo de software de Luis A. Hernández Elias: backend, APIs, modernización legacy y aplicaciones transaccionales con evidencia técnica verificable.',
     ],
 
     'case_studies' => [
@@ -23,30 +23,26 @@ return [
         ],
         [
             'name' => 'eFactura',
-            'eyebrow' => 'Brownfield .NET modernization',
-            'summary' => 'Evolución brownfield de una plataforma de facturación electrónica y ventas transaccionales para Uruguay hacia una arquitectura más explícita y verificable.',
+            'eyebrow' => 'Brownfield modernization',
+            'summary' => 'Modernización progresiva de una plataforma de facturación electrónica con contratos explícitos, convivencia con legado y disciplina de release.',
             'stack' => ['C#', '.NET 10', 'PostgreSQL', 'MySQL', 'Clean Architecture'],
             'evidence' => [
-                'Separación progresiva en Domain, Application, Infrastructure y Web API.',
-                'Persistencia validada sobre PostgreSQL y MySQL.',
-                'Fundaciones de Sales, Inventory, CAE, Finance y cálculo fiscal CFE 25.2.',
-                'Idempotencia, auditoría, outbox, concurrencia y rollback transaccional.',
+                'Modernización brownfield con continuidad funcional y reducción progresiva de deuda técnica.',
+                'Contratos explícitos, pruebas automatizadas y evolución gobernada por PRs y CI.',
             ],
             'repository_url' => 'https://github.com/LuisHdezE/efactura',
-            'accent' => 'teal',
+            'accent' => 'emerald',
         ],
         [
             'name' => 'ZoFloridane',
-            'eyebrow' => 'Commerce experience modernization',
-            'summary' => 'Modernización de una tienda WordPress/WooCommerce enfocada en experiencia móvil, claridad de compra y evolución segura sobre una plataforma existente.',
-            'stack' => ['PHP', 'WordPress', 'WooCommerce', 'JavaScript', 'UI/UX'],
+            'eyebrow' => 'Commerce modernization',
+            'summary' => 'Modernización de experiencia WooCommerce con enfoque mobile-first, limpieza de contenido demo y mejoras funcionales del flujo de compra.',
+            'stack' => ['WordPress', 'WooCommerce', 'PHP', 'UX/UI'],
             'evidence' => [
-                'Rediseño mobile-first de la experiencia de compra.',
-                'Trabajo sobre arquitectura existente sin exponer datos productivos ni credenciales.',
-                'Mejoras de carrito, localidad, entrega y flujo de pago orientado a Zelle.',
-                'Entrega versionada con validación local antes de despliegue.',
+                'Revisión y racionalización de una instalación existente con contenido demo heredado.',
+                'Mejoras de carrito, checkout, jerarquía visual y experiencia mobile-first.',
             ],
-            'repository_url' => 'https://github.com/LuisHdezE/ZoFloridane',
+            'repository_url' => 'https://github.com/LuisHdezE',
             'accent' => 'violet',
         ],
     ],
