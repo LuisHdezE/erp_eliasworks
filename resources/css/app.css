@@ -138,6 +138,52 @@
   .product-console {
     animation: console-float 8s ease-in-out infinite;
   }
+
+  .hero-stage::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.5), transparent);
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .hero-orb-left {
+    width: 28rem;
+    height: 28rem;
+    left: -10rem;
+    top: 10rem;
+    background: rgba(37, 99, 235, 0.16);
+  }
+
+  .hero-orb-right {
+    width: 42rem;
+    height: 42rem;
+    right: -12rem;
+    top: -10rem;
+    background: rgba(14, 165, 233, 0.11);
+  }
+
+  .dashboard-shell {
+    transform-origin: center;
+    transition: transform 350ms ease, box-shadow 350ms ease;
+  }
+
+  .dashboard-shell:hover {
+    box-shadow: 0 60px 160px rgba(0, 0, 0, 0.78);
+  }
+}
+
+@media (max-width: 1279px) {
+  .dashboard-shell {
+    transform: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
