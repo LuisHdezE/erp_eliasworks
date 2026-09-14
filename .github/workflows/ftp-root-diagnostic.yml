@@ -1,6 +1,6 @@
 name: EliasWorks FTP Root Diagnostic
 
-# Branch-only probe: read-only checks to identify what eliasworks.uy actually serves.
+# Branch-only probe: read-only checks to identify the live document root.
 on:
   pull_request:
     branches: [ main ]
@@ -19,79 +19,58 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inspect public DNS and HTTP signals read-only
-        run: |
-          set -euo pipefail
-          echo '=== DNS ==='
-          echo "A_RECORDS=$(getent ahostsv4 eliasworks.uy | awk '{print $1}' | sort -u | paste -sd, -)"
-
-          curl --silent --show-error --fail --location --dump-header /tmp/live-headers.txt https://eliasworks.uy/ --output /tmp/live-home.html
-
-          echo '=== SAFE HTTP HEADERS ==='
-          grep -Ei '^(HTTP/|server:|via:|x-powered-by:|x-cache:|cf-|content-type:|content-length:|etag:|last-modified:|location:)' /tmp/live-headers.txt || true
-
-          echo '=== SAFE DOCUMENT SIGNALS ==='
-          TITLE=$(python3 - <<'PY'
-          import re
-          from pathlib import Path
-          text = Path('/tmp/live-home.html').read_text(errors='ignore')
-          match = re.search(r'<title[^>]*>(.*?)</title>', text, flags=re.I|re.S)
-          print(re.sub(r'\s+', ' ', match.group(1)).strip() if match else 'NONE')
-          PY
-          )
-          H1=$(python3 - <<'PY'
-          import re
-          from pathlib import Path
-          text = Path('/tmp/live-home.html').read_text(errors='ignore')
-          match = re.search(r'<h1[^>]*>(.*?)</h1>', text, flags=re.I|re.S)
-          if not match:
-              print('NONE')
-          else:
-              value = re.sub(r'<[^>]+>', ' ', match.group(1))
-              print(re.sub(r'\s+', ' ', value).strip()[:240])
-          PY
-          )
-          echo "TITLE=${TITLE}"
-          echo "H1=${H1}"
-          echo "LIVE_BYTES=$(wc -c < /tmp/live-home.html)"
-          echo "LIVE_SHA256=$(sha256sum /tmp/live-home.html | cut -d' ' -f1)"
-
-      - name: Compare origin candidates read-only
+      - name: Compare existing static files read-only
         env:
           FTP_USER: luis@eliasworks.uy
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
-          curl --silent --show-error --fail --location https://eliasworks.uy/ --output /tmp/live-home.html
-          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/eliasworks.uy/index.html --output /tmp/ftp-static-home.html
-          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/resources/views/livewire/pages/home-page.blade.php --output /tmp/ftp-laravel-home.blade.php
 
-          echo '=== CANDIDATE SIGNALS ==='
-          cmp -s /tmp/live-home.html /tmp/ftp-static-home.html && echo 'LIVE_EQUALS_STATIC_INDEX=true' || echo 'LIVE_EQUALS_STATIC_INDEX=false'
-          grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'LIVE_HAS_CURRENT_LARAVEL_COPY=true' || echo 'LIVE_HAS_CURRENT_LARAVEL_COPY=false'
-          grep -Fq 'Construyo y modernizo software de negocio' /tmp/ftp-laravel-home.blade.php && echo 'FTP_PUBLIC_HTML_HAS_CURRENT_LARAVEL_COPY=true' || echo 'FTP_PUBLIC_HTML_HAS_CURRENT_LARAVEL_COPY=false'
+          compare_file() {
+            local label="$1"
+            local http_url="$2"
+            local ftp_url="$3"
+            local http_file="/tmp/${label}-http"
+            local ftp_file="/tmp/${label}-ftp"
 
-      - name: Dry-run FTP sync against account root
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ftp.eliasworks.uy
-          username: luis@eliasworks.uy
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          server-dir: ./
-          dry-run: true
-          log-level: verbose
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/tests/**
-            .env
-            phpunit.xml
-            README.md
-            composer.lock
-            package.json
-            package-lock.json
-            vite.config.js
-            deploy.md
-            cookies.txt
+            local http_status
+            http_status=$(curl --silent --show-error --location --output "$http_file" --write-out '%{http_code}' "$http_url")
+            echo "${label}_HTTP_STATUS=${http_status}"
+
+            if curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" "$ftp_url" --output "$ftp_file"; then
+              echo "${label}_FTP_EXISTS=true"
+            else
+              echo "${label}_FTP_EXISTS=false"
+              return 0
+            fi
+
+            if [ "$http_status" = "200" ]; then
+              echo "${label}_HTTP_BYTES=$(wc -c < "$http_file")"
+              echo "${label}_FTP_BYTES=$(wc -c < "$ftp_file")"
+              echo "${label}_HTTP_SHA256=$(sha256sum "$http_file" | cut -d' ' -f1)"
+              echo "${label}_FTP_SHA256=$(sha256sum "$ftp_file" | cut -d' ' -f1)"
+              if cmp -s "$http_file" "$ftp_file"; then
+                echo "${label}_MATCH=true"
+              else
+                echo "${label}_MATCH=false"
+              fi
+            fi
+          }
+
+          echo '=== PUBLIC_HTML/PUBLIC STATIC PROBES ==='
+          compare_file ROBOTS https://eliasworks.uy/robots.txt ftp://ftp.eliasworks.uy/public_html/public/robots.txt
+          compare_file SITEMAP https://eliasworks.uy/sitemap.xml ftp://ftp.eliasworks.uy/public_html/public/sitemap.xml
+          compare_file FAVICON https://eliasworks.uy/favicon.ico ftp://ftp.eliasworks.uy/public_html/public/favicon.ico
+
+          echo '=== ELIASWORKS.UY DIRECTORY STATIC PROBE ==='
+          compare_file PRUEBA https://eliasworks.uy/prueba.html ftp://ftp.eliasworks.uy/eliasworks.uy/prueba.html
+
+      - name: Verify current Laravel source is present in deployment target
+        env:
+          FTP_USER: luis@eliasworks.uy
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" ftp://ftp.eliasworks.uy/public_html/resources/views/livewire/pages/home-page.blade.php --output /tmp/home.blade.php
+          grep -Fq 'Construyo y modernizo software de negocio' /tmp/home.blade.php && echo 'FTP_PUBLIC_HTML_CURRENT_HOME=true' || echo 'FTP_PUBLIC_HTML_CURRENT_HOME=false'
+          grep -Fq 'Insurance Claims Legacy Modernization' /tmp/home.blade.php && echo 'FTP_PUBLIC_HTML_CURRENT_INSURANCECLAIMS=true' || echo 'FTP_PUBLIC_HTML_CURRENT_INSURANCECLAIMS=false'
