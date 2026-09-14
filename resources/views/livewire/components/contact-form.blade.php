@@ -8,7 +8,7 @@
             </div>
             <h3 class="text-lg font-medium text-teal-800 dark:text-teal-300">{{ $successMessage }}</h3>
             <p class="mt-2 text-sm text-teal-700 dark:text-teal-400">
-                Nos pondremos en contacto contigo lo antes posible para continuar la conversación.
+                Revisaré el contexto que compartiste para continuar la conversación.
             </p>
             <button wire:click="$set('isSubmitted', false)" class="mt-6 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-500 transition-colors">
                 Enviar otro mensaje
@@ -16,7 +16,11 @@
         </div>
     @else
         <form wire:submit.prevent="submit" class="space-y-6">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Envíanos un mensaje</h2>
+            <div class="mb-6">
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-primary-600">Contexto primero</p>
+                <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-white">Envíame un mensaje</h2>
+                <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">No necesitas preparar un brief perfecto. Con el problema, el estado actual y el resultado esperado es suficiente para empezar.</p>
+            </div>
 
             @if($selectedApp)
                 <div class="p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800 rounded-xl flex items-center gap-4 mb-8">
@@ -28,7 +32,7 @@
                         @endif
                     </div>
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">Solicitando Demo para:</p>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">Consulta sobre</p>
                         <p class="text-lg font-bold text-slate-900 dark:text-white">{{ $selectedApp->name }}</p>
                     </div>
                 </div>
@@ -37,7 +41,7 @@
             <div>
                 <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nombre completo <span class="text-red-500">*</span></label>
                 <div class="mt-1">
-                    <input type="text" wire:model.blur="name" id="name" autocomplete="name" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Ej. Juan Pérez">
+                    <input type="text" wire:model.blur="name" id="name" autocomplete="name" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Tu nombre">
                 </div>
                 @error('name') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
@@ -45,32 +49,32 @@
             <div>
                 <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Correo electrónico <span class="text-red-500">*</span></label>
                 <div class="mt-1">
-                    <input type="email" wire:model.blur="email" id="email" autocomplete="email" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="juan@ejemplo.com">
+                    <input type="email" wire:model.blur="email" id="email" autocomplete="email" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="tu@email.com">
                 </div>
                 @error('email') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label for="company" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Empresa (Opcional)</label>
+                <label for="company" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Empresa u organización (opcional)</label>
                 <div class="mt-1">
-                    <input type="text" wire:model.blur="company" id="company" autocomplete="organization" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Tu Empresa S.A.">
+                    <input type="text" wire:model.blur="company" id="company" autocomplete="organization" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Empresa u organización">
                 </div>
                 @error('company') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
-                    <label for="phone" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Teléfono</label>
+                    <label for="phone" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Teléfono (opcional)</label>
                     <div class="mt-1">
-                        <input type="text" wire:model.blur="phone" id="phone" autocomplete="tel" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="+54 11 ...">
+                        <input type="text" wire:model.blur="phone" id="phone" autocomplete="tel" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors">
                     </div>
                     @error('phone') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="whatsapp" class="block text-sm font-medium text-slate-700 dark:text-slate-300">WhatsApp</label>
+                    <label for="whatsapp" class="block text-sm font-medium text-slate-700 dark:text-slate-300">WhatsApp (opcional)</label>
                     <div class="mt-1">
-                        <input type="text" wire:model.blur="whatsapp" id="whatsapp" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="+54 9 11 ...">
+                        <input type="text" wire:model.blur="whatsapp" id="whatsapp" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors">
                     </div>
                     @error('whatsapp') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                 </div>
@@ -79,14 +83,14 @@
             <div>
                 <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Mensaje <span class="text-red-500">*</span></label>
                 <div class="mt-1">
-                    <textarea id="message" wire:model.blur="message" rows="4" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="¿Cómo podemos ayudarte?"></textarea>
+                    <textarea id="message" wire:model.blur="message" rows="5" class="block w-full rounded-xl shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-colors" placeholder="Cuéntame qué necesitas, qué existe hoy y qué resultado buscas."></textarea>
                 </div>
                 @error('message') <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" wire:loading.attr="disabled" wire:target="submit">
-                    <span wire:loading.remove wire:target="submit">Enviar Mensaje</span>
+                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" wire:loading.attr="disabled" wire:target="submit">
+                    <span wire:loading.remove wire:target="submit">Enviar mensaje</span>
                     <span wire:loading wire:target="submit" class="flex items-center">
                         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -96,9 +100,9 @@
                     </span>
                 </button>
             </div>
-            
+
             <p class="text-xs text-slate-500 dark:text-slate-400 text-center mt-4">
-                Tus datos están protegidos y no los compartiremos con terceros.
+                La información enviada se utiliza únicamente para gestionar esta conversación.
             </p>
         </form>
     @endif

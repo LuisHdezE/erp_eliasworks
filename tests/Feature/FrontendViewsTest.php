@@ -63,9 +63,21 @@ class FrontendViewsTest extends TestCase
         $this->get('/nosotros')->assertOk();
     }
 
-    public function test_contact_page_renders_successfully(): void
+    public function test_contact_page_renders_professional_identity_without_placeholder_contact_data(): void
     {
-        $this->get('/contacto')->assertOk();
+        $response = $this->get('/contacto');
+
+        $response
+            ->assertOk()
+            ->assertSee('Hablemos de software que necesita funcionar de verdad.')
+            ->assertSee('Software Engineering · Uruguay')
+            ->assertSee('Backend y APIs para aplicaciones de negocio.')
+            ->assertSee('github.com/LuisHdezE')
+            ->assertDontSee('Buenos Aires, Argentina')
+            ->assertDontSee('+54 11 1234-5678')
+            ->assertDontSee('contacto@eliasworks.com')
+            ->assertDontSee('+54 11 ...')
+            ->assertDontSee('+54 9 11 ...');
     }
 
     public function test_privacy_page_renders_successfully(): void

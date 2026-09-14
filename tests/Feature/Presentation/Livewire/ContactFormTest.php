@@ -48,7 +48,7 @@ class ContactFormTest extends TestCase
             ->call('submit')
             ->assertHasNoErrors()
             ->assertSet('isSubmitted', true)
-            ->assertSee('Gracias por contactarnos');
+            ->assertSee('Gracias por escribir');
 
         $this->assertDatabaseHas('contact_requests', [
             'email' => 'jane@example.com',
