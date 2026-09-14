@@ -119,12 +119,12 @@
                                             <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
                                         </div>
                                         <p class="mt-2 text-sm font-semibold text-white">PostgreSQL 18</p>
-                                        <p class="mt-1 text-[11px] text-slate-500">18 provider-real QA scenarios</p>
+                                        <p class="mt-1 text-[11px] text-slate-500">Validated against the real database provider.</p>
                                     </div>
                                     <div class="rounded-xl border border-white/10 bg-gradient-to-br from-cyan-500/10 to-transparent p-4">
                                         <p class="text-xs font-bold text-slate-200">Delivery discipline</p>
                                         <p class="mt-2 text-sm font-semibold text-white">CI · contracts · release</p>
-                                        <p class="mt-1 text-[11px] text-slate-500">Evidence-backed governed delivery</p>
+                                        <p class="mt-1 text-[11px] text-slate-500">Evidence-backed governed delivery.</p>
                                     </div>
                                 </div>
 
