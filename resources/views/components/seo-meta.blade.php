@@ -7,9 +7,12 @@
 ])
 
 @php
-    $defaultTitle = \App\Infrastructure\Persistence\Eloquent\Models\SiteSetting::get('site_name', 'EliasWorks');
-    $defaultDescription = \App\Infrastructure\Persistence\Eloquent\Models\SiteSetting::get('site_description', 'Soluciones de software y plataformas SaaS innovadoras.');
-    
+    $defaultTitle = config('portfolio.site.name', 'EliasWorks');
+    $defaultDescription = config(
+        'portfolio.site.description',
+        'Software engineering portfolio focused on backend, APIs, legacy modernization and transactional applications.'
+    );
+
     $finalTitle = $title ? "{$title} | {$defaultTitle}" : $defaultTitle;
     $finalDescription = $description ?? $defaultDescription;
     $finalImage = $image ?? url('/images/og-image.jpg');
