@@ -42,7 +42,14 @@ jobs:
             await browser.close();
           })();
           NODE
+      - name: Download InsuranceClaims approved UI reference
+        run: |
+          curl -L --fail --retry 3 \
+            https://raw.githubusercontent.com/LuisHdezE/InsuranceClaims/main/documentation/ui-reference/r3/claims-workspace-kanban-approved.jpg \
+            -o insuranceclaims-desktop.jpg
       - uses: actions/upload-artifact@v4
         with:
           name: eliasworks-project-live-captures-v3-3
-          path: '*-desktop.png'
+          path: |
+            *-desktop.png
+            insuranceclaims-desktop.jpg
