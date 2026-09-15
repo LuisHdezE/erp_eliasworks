@@ -1,0 +1,74 @@
+name: EliasWorks Visual Review V3.3
+
+on:
+  push:
+    branches:
+      - portfolio/secondary-pages-compact-v3-3
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, pdo_sqlite
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: composer install --no-interaction --prefer-dist
+      - run: npm ci
+      - run: npm run build
+      - run: |
+          cp .env.example .env
+          php artisan key:generate
+          touch database/database.sqlite
+          php artisan migrate --force
+          php artisan db:seed --force
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - run: php artisan serve --host=127.0.0.1 --port=8000 > /tmp/eliasworks.log 2>&1 &
+      - run: |
+          node - <<'NODE'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({headless:true});
+            const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+            const routes = [
+              ['projects', '/proyectos'],
+              ['services', '/servicios'],
+              ['process', '/proceso'],
+              ['about', '/nosotros'],
+              ['contact', '/contacto'],
+              ['catalog', '/catalogo'],
+            ];
+            for (const [name, route] of routes) {
+              await desktop.goto(`http://127.0.0.1:8000${route}`, { waitUntil: 'networkidle' });
+              await desktop.screenshot({ path: `${name}-desktop-viewport.png` });
+              await desktop.screenshot({ path: `${name}-desktop-full.png`, fullPage: true });
+            }
+            await desktop.goto('http://127.0.0.1:8000/catalogo', { waitUntil: 'networkidle' });
+            const firstApp = await desktop.locator('a[href^="/app/"]').first().getAttribute('href');
+            if (firstApp) {
+              await desktop.goto(`http://127.0.0.1:8000${firstApp}`, { waitUntil: 'networkidle' });
+              await desktop.screenshot({ path: 'app-detail-desktop-full.png', fullPage: true });
+            }
+            const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+            for (const [name, route] of [['projects','/proyectos'], ['contact','/contacto'], ['catalog','/catalogo']]) {
+              await mobile.goto(`http://127.0.0.1:8000${route}`, { waitUntil: 'networkidle' });
+              await mobile.screenshot({ path: `${name}-mobile-full.png`, fullPage: true });
+            }
+            await browser.close();
+          })();
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eliasworks-v3-3-secondary-pages
+          path: |
+            *-desktop-viewport.png
+            *-desktop-full.png
+            *-mobile-full.png
