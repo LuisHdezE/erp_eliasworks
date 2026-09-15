@@ -182,13 +182,33 @@
 
 @media (min-width: 1280px) {
   .hero-stage h1 {
-    font-size: 4.55rem !important;
-    max-width: 38rem;
+    font-size: 2.95rem !important;
+    line-height: 0.98 !important;
+    max-width: 30rem;
+  }
+
+  .hero-stage h1 + p {
+    margin-top: 1rem !important;
+    max-width: 33rem;
+    font-size: 0.95rem !important;
+    line-height: 1.55rem !important;
+  }
+
+  .hero-stage h1 + p + div {
+    margin-top: 1.15rem !important;
+  }
+
+  .hero-stage h1 + p + div a {
+    padding: 0.68rem 1.1rem !important;
+    font-size: 0.9rem;
   }
 
   .hero-stage .dashboard-shell {
-    margin-right: 2rem;
-    transform: translateX(-0.5rem) rotate(-1deg) !important;
+    margin-top: -4.25rem;
+    margin-right: 0;
+    margin-bottom: -4.25rem;
+    transform: scale(0.65) rotate(-1deg) !important;
+    transform-origin: left center;
   }
 }
 
