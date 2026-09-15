@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="mt-7 grid grid-cols-2 gap-3">
-                        <a href="mailto:contacto@eliasworks.com" class="group col-span-2 rounded-2xl border border-white/10 bg-white/[0.045] p-4 transition hover:bg-white/[0.08]">
+                        <a href="mailto:{{ config('portfolio.contact.email') }}" class="group col-span-2 rounded-2xl border border-white/10 bg-white/[0.045] p-4 transition hover:bg-white/[0.08]">
                             <div class="flex items-center gap-3">
                                 <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-300">
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -37,7 +37,21 @@
                                 </span>
                                 <div class="min-w-0">
                                     <p class="text-[10px] uppercase tracking-[0.16em] text-slate-500">Email</p>
-                                    <p class="mt-0.5 text-sm font-semibold text-white group-hover:text-cyan-200">contacto@eliasworks.com</p>
+                                    <p class="mt-0.5 break-all text-sm font-semibold text-white group-hover:text-cyan-200">{{ config('portfolio.contact.email') }}</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{{ config('portfolio.contact.whatsapp_url') }}" target="_blank" rel="noopener noreferrer" class="group rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.08] p-3.5 transition hover:border-emerald-300/30 hover:bg-emerald-400/[0.13]">
+                            <div class="flex items-center gap-2.5">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
+                                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12.04 2C6.52 2 2.03 6.48 2.03 12c0 1.76.46 3.48 1.34 5L2 22l5.13-1.35A9.98 9.98 0 0012.04 22C17.56 22 22 17.52 22 12S17.56 2 12.04 2zm5.83 14.17c-.25.71-1.47 1.36-2.03 1.45-.52.08-1.18.12-1.91-.12-.44-.14-1.01-.33-1.73-.64-3.04-1.31-5.02-4.37-5.17-4.57-.15-.2-1.24-1.65-1.24-3.15 0-1.5.78-2.24 1.06-2.55.28-.3.61-.38.81-.38.2 0 .4 0 .57.01.18.01.43-.07.67.51.25.6.84 2.06.91 2.21.08.15.13.33.03.53-.1.2-.15.33-.3.51-.15.18-.32.4-.45.54-.15.15-.31.31-.13.61.18.3.79 1.3 1.69 2.1 1.16 1.03 2.14 1.35 2.44 1.5.3.15.48.13.66-.08.18-.2.76-.89.96-1.19.2-.3.4-.25.68-.15.28.1 1.76.83 2.06.98.3.15.5.23.58.35.08.13.08.73-.17 1.44z"/>
+                                    </svg>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-[9px] uppercase tracking-[0.14em] text-emerald-300/70">WhatsApp</p>
+                                    <p class="mt-0.5 truncate text-xs font-semibold text-white group-hover:text-emerald-200">{{ config('portfolio.contact.whatsapp_display') }} ↗</p>
                                 </div>
                             </div>
                         </a>
@@ -55,21 +69,6 @@
                                 </div>
                             </div>
                         </a>
-
-                        <div class="rounded-2xl border border-white/10 bg-white/[0.045] p-3.5">
-                            <div class="flex items-center gap-2.5">
-                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
-                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                    </svg>
-                                </span>
-                                <div class="min-w-0">
-                                    <p class="text-[9px] uppercase tracking-[0.14em] text-slate-500">Base</p>
-                                    <p class="mt-0.5 truncate text-xs font-semibold text-white">Uruguay · Remoto</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="mt-auto pt-6 hidden sm:block">
@@ -77,7 +76,7 @@
                             <svg class="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <p>Un mensaje breve con el objetivo, el estado actual y el principal bloqueo es suficiente para empezar.</p>
+                            <p>También puedes escribir directamente por WhatsApp o correo. Un mensaje breve con el objetivo y el principal bloqueo es suficiente para empezar.</p>
                         </div>
                     </div>
                 </div>

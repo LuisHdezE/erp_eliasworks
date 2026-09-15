@@ -74,9 +74,18 @@ class FrontendViewsTest extends TestCase
         $this->get('/nosotros')->assertOk();
     }
 
-    public function test_contact_page_renders_successfully(): void
+    public function test_contact_page_renders_real_contact_channels(): void
     {
-        $this->get('/contacto')->assertOk();
+        $response = $this->get('/contacto');
+
+        $response
+            ->assertOk()
+            ->assertSee('luisitohe@gmail.com')
+            ->assertSee('mailto:luisitohe@gmail.com', false)
+            ->assertSee('+598 97 092 037')
+            ->assertSee('https://wa.me/59897092037', false)
+            ->assertDontSee('contacto@eliasworks.com')
+            ->assertDontSee('admin@eliasworks.com');
     }
 
     public function test_privacy_page_renders_successfully(): void
