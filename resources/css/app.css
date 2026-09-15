@@ -115,10 +115,10 @@
 
   .tech-grid {
     background-image:
-      linear-gradient(rgba(96, 165, 250, 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(96, 165, 250, 0.055) 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.22));
+      linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.18));
   }
 
   .surface-sheen::before {
@@ -150,24 +150,24 @@
   .hero-orb {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(80px);
+    filter: blur(76px);
     pointer-events: none;
   }
 
   .hero-orb-left {
-    width: 28rem;
-    height: 28rem;
-    left: -10rem;
-    top: 10rem;
-    background: rgba(37, 99, 235, 0.16);
+    width: 24rem;
+    height: 24rem;
+    left: -9rem;
+    top: 8rem;
+    background: rgba(37, 99, 235, 0.14);
   }
 
   .hero-orb-right {
-    width: 42rem;
-    height: 42rem;
-    right: -12rem;
-    top: -10rem;
-    background: rgba(14, 165, 233, 0.11);
+    width: 36rem;
+    height: 36rem;
+    right: -10rem;
+    top: -9rem;
+    background: rgba(14, 165, 233, 0.1);
   }
 
   .dashboard-shell {
@@ -176,19 +176,19 @@
   }
 
   .dashboard-shell:hover {
-    box-shadow: 0 60px 160px rgba(0, 0, 0, 0.78);
+    box-shadow: 0 48px 125px rgba(0, 0, 0, 0.72);
   }
 }
 
 @media (min-width: 1280px) {
   .hero-stage h1 {
-    font-size: 5.1rem !important;
-    max-width: 42rem;
+    font-size: 4.55rem !important;
+    max-width: 38rem;
   }
 
   .hero-stage .dashboard-shell {
-    margin-right: 4.5rem;
-    transform: translateX(-1.25rem) rotate(-1deg) !important;
+    margin-right: 2rem;
+    transform: translateX(-0.5rem) rotate(-1deg) !important;
   }
 }
 
