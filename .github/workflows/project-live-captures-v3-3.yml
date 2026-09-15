@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - run: npm install --no-save playwright
       - run: npx playwright install --with-deps chromium
       - name: Capture deployed solutions
@@ -42,14 +42,33 @@ jobs:
             await browser.close();
           })();
           NODE
-      - name: Download InsuranceClaims approved UI reference
+      - name: Prepare InsuranceClaims web UI
         run: |
-          curl -L --fail --retry 3 \
-            https://raw.githubusercontent.com/LuisHdezE/InsuranceClaims/main/documentation/ui-reference/r3/claims-workspace-kanban-approved.jpg \
-            -o insuranceclaims-desktop.jpg
+          git clone --depth 1 https://github.com/LuisHdezE/InsuranceClaims.git /tmp/insuranceclaims
+          cd /tmp/insuranceclaims
+          npm ci
+          npm --workspace apps/web run dev -- --host 127.0.0.1 --port 4173 > /tmp/insuranceclaims-web.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/insuranceclaims-web.log
+          exit 1
+      - name: Capture InsuranceClaims public UI
+        run: |
+          node - <<'NODE'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+            await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle', timeout: 60000 });
+            await page.screenshot({ path: 'insuranceclaims-desktop.png', fullPage: false });
+            await browser.close();
+          })();
+          NODE
       - uses: actions/upload-artifact@v4
         with:
           name: eliasworks-project-live-captures-v3-3
-          path: |
-            *-desktop.png
-            insuranceclaims-desktop.jpg
+          path: '*-desktop.png'
