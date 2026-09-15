@@ -28,6 +28,7 @@ jobs:
           php artisan key:generate
           touch database/database.sqlite
           php artisan migrate --force
+      - run: npm install --no-save playwright
       - run: npx playwright install --with-deps chromium
       - run: php artisan serve --host=127.0.0.1 --port=8000 > /tmp/eliasworks.log 2>&1 &
       - run: |
