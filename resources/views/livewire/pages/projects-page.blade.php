@@ -97,8 +97,10 @@
                                         </a>
                                     @endif
 
-                                    @if(empty($project['repository_url']))
-                                        <span class="text-xs text-slate-400">Proyecto privado · demo pública disponible</span>
+                                    @if(!empty($project['status_label']))
+                                        <span class="text-xs text-slate-400">{{ $project['status_label'] }}</span>
+                                    @elseif(empty($project['repository_url']))
+                                        <span class="text-xs text-slate-400">Proyecto privado</span>
                                     @endif
                                 </div>
                             </div>
