@@ -6,6 +6,13 @@ return [
         'description' => 'Portfolio de desarrollo de software de Luis A. Hernández Elias: backend, APIs, modernización legacy y aplicaciones transaccionales con evidencia técnica verificable.',
     ],
 
+    'contact' => [
+        'email' => 'luisitohe@gmail.com',
+        'whatsapp_display' => '+598 97 092 037',
+        'whatsapp_e164' => '59897092037',
+        'whatsapp_url' => 'https://wa.me/59897092037?text=Hola%20Luis%2C%20te%20contacto%20desde%20EliasWorks.',
+    ],
+
     'case_studies' => [
         [
             'name' => 'Insurance Claims Legacy Modernization',
