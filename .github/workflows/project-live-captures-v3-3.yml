@@ -1,0 +1,43 @@
+name: EliasWorks Project Live Captures V3.3
+
+on:
+  push:
+    branches:
+      - portfolio/secondary-pages-compact-v3-3
+    paths:
+      - '.github/workflows/project-live-captures-v3-3.yml'
+  workflow_dispatch:
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Capture deployed solutions
+        run: |
+          node - <<'NODE'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+            const targets = [
+              ['dulcehogar', 'https://dulcehogar.eliasworks.uy/'],
+              ['zofloridane', 'https://zofloridane.com/'],
+            ];
+            for (const [name, url] of targets) {
+              await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+              await page.waitForTimeout(3500);
+              await page.screenshot({ path: `${name}-desktop.png`, fullPage: false });
+            }
+            await browser.close();
+          })();
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eliasworks-project-live-captures-v3-3
+          path: '*-desktop.png'
