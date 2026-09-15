@@ -43,8 +43,8 @@
 
                 <div class="hidden items-center gap-3 lg:flex">
                     <a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="text-[13px] font-semibold text-slate-400 transition-colors hover:text-white">GitHub ↗</a>
-                    <a href="/contacto" class="inline-flex items-center justify-center rounded-xl border border-blue-400/55 px-4 py-2 text-[13px] font-bold text-blue-200 transition hover:bg-blue-500/10 hover:text-white">
-                        Hablemos <span class="ml-2">→</span>
+                    <a href="{{ config('portfolio.contact.whatsapp_url') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl border border-emerald-400/55 px-4 py-2 text-[13px] font-bold text-emerald-200 transition hover:bg-emerald-500/10 hover:text-white">
+                        Hablemos por WhatsApp <span class="ml-2">↗</span>
                     </a>
                 </div>
 
@@ -59,6 +59,7 @@
                         <a href="/proceso" class="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-200 hover:bg-white/[0.06]">Proceso</a>
                         <a href="/contacto" class="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-200 hover:bg-white/[0.06]">Contacto</a>
                         <div class="my-2 border-t border-white/10"></div>
+                        <a href="{{ config('portfolio.contact.whatsapp_url') }}" target="_blank" rel="noopener noreferrer" class="block rounded-xl px-4 py-3 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/10">WhatsApp ↗</a>
                         <a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="block rounded-xl px-4 py-3 text-sm font-semibold text-blue-300 hover:bg-blue-500/10">GitHub ↗</a>
                     </nav>
                 </details>
@@ -96,6 +97,8 @@
                     <h2 class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Conectar</h2>
                     <ul class="mt-3 space-y-2 text-[13px]">
                         <li><a href="/contacto" class="transition-colors hover:text-white">Contacto</a></li>
+                        <li><a href="{{ config('portfolio.contact.whatsapp_url') }}" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-emerald-300">WhatsApp · {{ config('portfolio.contact.whatsapp_display') }} ↗</a></li>
+                        <li><a href="mailto:{{ config('portfolio.contact.email') }}" class="transition-colors hover:text-white">{{ config('portfolio.contact.email') }}</a></li>
                         <li><a href="https://github.com/LuisHdezE" target="_blank" rel="noreferrer" class="transition-colors hover:text-white">GitHub ↗</a></li>
                         <li><a href="/privacidad" class="transition-colors hover:text-white">Privacidad</a></li>
                         <li><a href="/terminos" class="transition-colors hover:text-white">Términos</a></li>
