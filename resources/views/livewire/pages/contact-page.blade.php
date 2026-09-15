@@ -1,99 +1,91 @@
-<div class="bg-gray-50 dark:bg-slate-900 min-h-screen pt-16 sm:pt-20 pb-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div class="text-center max-w-2xl mx-auto mb-10 fade-in">
-            <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl tracking-tight">
-                Hablemos de tu próximo gran proyecto
-            </h1>
-            <p class="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-300">
-                Estamos listos para ayudarte a transformar tu negocio con tecnología moderna, escalable y segura.
-            </p>
-        </div>
+<div class="bg-slate-100 dark:bg-slate-950 pt-8 sm:pt-10 pb-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="overflow-hidden rounded-[1.75rem] border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-900/5 grid grid-cols-1 lg:grid-cols-[0.88fr_1.12fr]">
+            <section class="relative overflow-hidden bg-slate-950 px-6 py-7 sm:px-8 sm:py-8 lg:p-9 text-white fade-in">
+                <div class="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-blue-500/15 blur-3xl" aria-hidden="true"></div>
+                <div class="absolute -bottom-28 -left-20 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" aria-hidden="true"></div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
-            
-            <!-- Información de Contacto -->
-            <div class="slide-up" style="animation-delay: 0.1s;">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700 h-full">
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Información de Contacto</h2>
-                    
-                    <div class="space-y-5">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-base font-medium text-slate-900 dark:text-white">Email</h3>
-                                <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                                    <a href="mailto:contacto@eliasworks.com" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                                        contacto@eliasworks.com
-                                    </a>
-                                </p>
-                            </div>
+                <div class="relative h-full flex flex-col">
+                    <div>
+                        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-300">
+                            <span class="h-1.5 w-1.5 rounded-full bg-cyan-300"></span>
+                            Contacto
                         </div>
 
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-xl bg-teal-50 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.25-3.95-6.847-6.847l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-base font-medium text-slate-900 dark:text-white">Teléfono</h3>
-                                <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                                    +54 11 1234-5678
-                                </p>
-                            </div>
+                        <h1 class="mt-5 max-w-xl text-3xl sm:text-4xl font-extrabold tracking-tight leading-[1.05]">
+                            Conversemos sobre lo que necesitas resolver.
+                        </h1>
+
+                        <p class="mt-4 max-w-lg text-sm sm:text-base leading-6 text-slate-300">
+                            Cuéntame qué quieres construir, modernizar o destrabar. Primero entendemos el problema y después elegimos la tecnología.
+                        </p>
+
+                        <div class="mt-5 flex flex-wrap gap-2 text-[11px] font-medium text-slate-200">
+                            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">Backend & APIs</span>
+                            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">Modernización</span>
+                            <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">Aplicaciones de negocio</span>
                         </div>
-                        
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-xl bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
+                    </div>
+
+                    <div class="mt-7 grid grid-cols-2 gap-3">
+                        <a href="mailto:contacto@eliasworks.com" class="group col-span-2 rounded-2xl border border-white/10 bg-white/[0.045] p-4 transition hover:bg-white/[0.08]">
+                            <div class="flex items-center gap-3">
+                                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-300">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                    </svg>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-[10px] uppercase tracking-[0.16em] text-slate-500">Email</p>
+                                    <p class="mt-0.5 text-sm font-semibold text-white group-hover:text-cyan-200">contacto@eliasworks.com</p>
+                                </div>
                             </div>
-                            <div class="ml-3">
-                                <h3 class="text-base font-medium text-slate-900 dark:text-white">Ubicación</h3>
-                                <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                                    Buenos Aires, Argentina<br>
-                                    (Atención global remota)
-                                </p>
+                        </a>
+
+                        <a href="https://github.com/LuisHdezE" target="_blank" rel="noopener noreferrer" class="group rounded-2xl border border-white/10 bg-white/[0.045] p-3.5 transition hover:bg-white/[0.08]">
+                            <div class="flex items-center gap-2.5">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/15 text-violet-300">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.426 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.071 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844a9.59 9.59 0 012.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.337 4.695-4.566 4.943.359.31.678.921.678 1.856 0 1.34-.012 2.421-.012 2.75 0 .269.18.58.688.481A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-[9px] uppercase tracking-[0.14em] text-slate-500">GitHub</p>
+                                    <p class="mt-0.5 truncate text-xs font-semibold text-white group-hover:text-violet-200">LuisHdezE ↗</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="rounded-2xl border border-white/10 bg-white/[0.045] p-3.5">
+                            <div class="flex items-center gap-2.5">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-[9px] uppercase tracking-[0.14em] text-slate-500">Base</p>
+                                    <p class="mt-0.5 truncate text-xs font-semibold text-white">Uruguay · Remoto</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
-                        <h4 class="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-3">Síguenos</h4>
-                        <div class="flex space-x-4">
-                            <!-- LinkedIn -->
-                            <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors">
-                                <span class="sr-only">LinkedIn</span>
-                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                            <!-- Twitter -->
-                            <a href="#" class="text-slate-400 hover:text-blue-400 transition-colors">
-                                <span class="sr-only">Twitter</span>
-                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                                </svg>
-                            </a>
+
+                    <div class="mt-auto pt-6 hidden sm:block">
+                        <div class="border-t border-white/10 pt-4 flex items-start gap-3 text-xs leading-5 text-slate-400">
+                            <svg class="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p>Un mensaje breve con el objetivo, el estado actual y el principal bloqueo es suficiente para empezar.</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Formulario de Contacto -->
-            <div class="slide-up" style="animation-delay: 0.2s;">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700 h-full">
-                    <livewire:components.contact-form />
-                </div>
-            </div>
-
+            <section class="bg-white dark:bg-slate-900 px-6 py-7 sm:px-8 sm:py-8 lg:p-9 slide-up" style="animation-delay: 0.1s;">
+                <livewire:components.contact-form />
+            </section>
         </div>
     </div>
 </div>
