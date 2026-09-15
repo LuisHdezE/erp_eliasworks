@@ -1,5 +1,6 @@
 name: EliasWorks FTP Root Diagnostic
 
+# Read-only production diagnostics. Never merge this workflow.
 on:
   pull_request:
     branches: [ main ]
@@ -12,33 +13,55 @@ permissions:
 
 jobs:
   ftp-root-diagnostic:
-    name: Inspect FTP root safely
+    name: Inspect live EliasWorks safely
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Dry-run FTP sync against account root
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ftp.eliasworks.uy
-          username: luis@eliasworks.uy
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          server-dir: ./
-          dry-run: true
-          log-level: verbose
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/tests/**
-            .env
-            phpunit.xml
-            README.md
-            composer.lock
-            package.json
-            package-lock.json
-            vite.config.js
-            deploy.md
-            cookies.txt
+      - name: Compare deployed visual sources read-only
+        env:
+          FTP_USER: luis@eliasworks.uy
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+
+          compare_file() {
+            local key="$1"
+            local local_path="$2"
+            local remote_path="$3"
+            local remote_file="/tmp/${key}.remote"
+            curl --silent --show-error --fail --user "${FTP_USER}:${FTP_PASSWORD}" \
+              "ftp://ftp.eliasworks.uy/public_html/${remote_path}" \
+              --output "${remote_file}"
+            echo "${key}_LOCAL_BYTES=$(wc -c < "${local_path}")"
+            echo "${key}_REMOTE_BYTES=$(wc -c < "${remote_file}")"
+            echo "${key}_LOCAL_SHA256=$(sha256sum "${local_path}" | cut -d' ' -f1)"
+            echo "${key}_REMOTE_SHA256=$(sha256sum "${remote_file}" | cut -d' ' -f1)"
+            if cmp -s "${local_path}" "${remote_file}"; then
+              echo "${key}_MATCH=true"
+            else
+              echo "${key}_MATCH=false"
+            fi
+          }
+
+          compare_file HOME resources/views/livewire/pages/home-page.blade.php resources/views/livewire/pages/home-page.blade.php
+          compare_file LAYOUT resources/views/components/layouts/app.blade.php resources/views/components/layouts/app.blade.php
+          compare_file CSS resources/css/app.css resources/css/app.css
+
+          grep -Fq 'InsuranceClaims · Release Console' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_RELEASE_CONSOLE=true' || echo 'REMOTE_HOME_HAS_RELEASE_CONSOLE=false'
+          grep -Fq 'Ingeniería de software' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=true' || echo 'REMOTE_HOME_HAS_PREMIUM_HEADLINE=false'
+          grep -Fq 'con impacto real.' /tmp/HOME.remote && echo 'REMOTE_HOME_HAS_IMPACT_LINE=true' || echo 'REMOTE_HOME_HAS_IMPACT_LINE=false'
+
+      - name: Probe live flagship v2 Home without failing job
+        run: |
+          set -euo pipefail
+          status=$(curl --silent --show-error --location --output /tmp/live-home.html --write-out '%{http_code}' https://eliasworks.uy/ || true)
+          echo "LIVE_HTTP_STATUS=${status}"
+          if [ "$status" = '200' ]; then
+            grep -Fq 'Ingeniería de software' /tmp/live-home.html && echo 'LIVE_HAS_V2_HEADLINE=true' || echo 'LIVE_HAS_V2_HEADLINE=false'
+            grep -Fq 'con impacto real.' /tmp/live-home.html && echo 'LIVE_HAS_V2_IMPACT=true' || echo 'LIVE_HAS_V2_IMPACT=false'
+            grep -Fq 'InsuranceClaims · Release Console' /tmp/live-home.html && echo 'LIVE_HAS_RELEASE_CONSOLE=true' || echo 'LIVE_HAS_RELEASE_CONSOLE=false'
+            grep -Fq 'Construyo y modernizo software de negocio' /tmp/live-home.html && echo 'LIVE_HAS_CURRENT_POSITIONING=true' || echo 'LIVE_HAS_CURRENT_POSITIONING=false'
+            grep -Fq 'Elias Works | Engineering Solutions & Software Development' /tmp/live-home.html && echo 'LIVE_HAS_OLD_TITLE=true' || echo 'LIVE_HAS_OLD_TITLE=false'
+          fi
