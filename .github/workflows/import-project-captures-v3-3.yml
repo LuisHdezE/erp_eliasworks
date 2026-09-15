@@ -1,0 +1,45 @@
+name: EliasWorks Import Project Captures V3.3
+
+on:
+  push:
+    branches:
+      - portfolio/secondary-pages-compact-v3-3
+    paths:
+      - '.github/workflows/import-project-captures-v3-3.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: portfolio/secondary-pages-compact-v3-3
+      - name: Download validated capture artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/captures
+          gh run download 34918468247 \
+            --repo LuisHdezE/erp_eliasworks \
+            --name eliasworks-project-live-captures-v3-3 \
+            --dir /tmp/captures
+      - name: Optimize captures for portfolio
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq webp
+          mkdir -p public/images/projects
+          cwebp -quiet -q 82 -resize 1200 750 /tmp/captures/insuranceclaims-desktop.png -o public/images/projects/insuranceclaims.webp
+          cwebp -quiet -q 82 -resize 1200 750 /tmp/captures/dulcehogar-desktop.png -o public/images/projects/dulcehogar.webp
+          cwebp -quiet -q 82 -resize 1200 750 /tmp/captures/zofloridane-desktop.png -o public/images/projects/zofloridane.webp
+      - name: Commit portfolio captures
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/images/projects
+          git diff --cached --quiet && exit 0
+          git commit -m 'feat(portfolio): add real project screenshots'
+          git push origin HEAD:portfolio/secondary-pages-compact-v3-3
