@@ -11,7 +11,7 @@ class SendContactRequestNotification implements ShouldQueue
 {
     public function handle(ContactRequestSubmitted $event): void
     {
-        Mail::to('admin@eliasworks.com')->send(
+        Mail::to(config('portfolio.contact.email'))->send(
             new ContactRequestReceived($event->contactRequest)
         );
     }
